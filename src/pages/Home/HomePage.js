@@ -71,19 +71,53 @@ export default class App extends Component<Props> {
         });
     }
 
+    deleteData(data) {
+        AsyncStorage.getItem('itemData',(err, result) => {
+            let date = data.date;
+            let obj = {
+                date: date,
+                datas: [data]
+            };
+
+            if(result) { // 有数据
+                result = JSON.parse(result);
+                let dataIndex = -1;
+                for(let i = 0; i < result.length; i++) {
+                    if(result[i].date === date) {
+                        dataIndex = i;
+                        break;
+                    }
+                }
+                if(dataIndex >= 0) { // 有今天的存储记录
+                    result[dataIndex].datas.push(data);
+                }else{
+                    result.push(obj)
+                }
+            } else {
+                result = [obj];
+            }
+
+            AsyncStorage.setItem('itemData',JSON.stringify(result));
+            DeviceEventEmitter.emit('updateHome',result);
+            //AsyncStorage.getItem('itemData',(err,result)=>{console.warn(result)})
+
+        })
+    }
+
     _renderItem({item,index}) {
 
         return(
-            <View style={styles.itemContainer}>
+            <TouchableOpacity activeOpacity={0.8} onLongPress={()=>console.warn('1')} style={styles.itemContainer}>
                 <Icon name={item.icon} style={styles.itemIcon}/>
                 <Text style={styles.itemText}>{item.name}</Text>
                 <Text style={[styles.itemText,{fontSize:18,color:'#111',position:'absolute',right:10}]}>{item.money}</Text>
-            </View>
+            </TouchableOpacity>
         );
     }
     _setMoneyCount() {
         let {data} = this.state;
-        let income, outlay = "0";
+        let income = "0";
+        let outlay = "0";
         if(data.length === 0) {
             income = outlay = '0';
         }else{
