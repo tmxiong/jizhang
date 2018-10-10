@@ -159,7 +159,7 @@ export default class App extends Component<Props> {
           }
 
           AsyncStorage.setItem('itemData',JSON.stringify(result));
-          DeviceEventEmitter.emit('updateHome',result);
+          DeviceEventEmitter.emit('updateHome',result, date);
           //AsyncStorage.getItem('itemData',(err,result)=>{console.warn(result)})
 
       })

@@ -12,7 +12,8 @@ import {
     StatusBar, ScrollView,
     DeviceEventEmitter,
     FlatList,
-    AsyncStorage
+    AsyncStorage,
+    Alert
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import utils from '../../utils/utils'
@@ -37,8 +38,9 @@ export default class App extends Component<Props> {
         //AsyncStorage.clear();
         this._setData(this.state.date);
 
-        this.ls = DeviceEventEmitter.addListener('updateHome',(data)=>{
-            this._setData(this.currentDate);
+        this.ls = DeviceEventEmitter.addListener('updateHome',(data, date)=>{
+            this.setState({date:date});
+            this._setData(date);
         })
     }
 
@@ -71,43 +73,40 @@ export default class App extends Component<Props> {
         });
     }
 
-    deleteData(data) {
-        AsyncStorage.getItem('itemData',(err, result) => {
-            let date = data.date;
-            let obj = {
-                date: date,
-                datas: [data]
-            };
+    deleteData(index) {
+        Alert.alert('是否删除？',"",[
+            {text:'取消',onPress: ()=>{}},
+            {text:'确定',onPress:()=>{
+                    AsyncStorage.getItem('itemData',(err, result) => {
 
-            if(result) { // 有数据
-                result = JSON.parse(result);
-                let dataIndex = -1;
-                for(let i = 0; i < result.length; i++) {
-                    if(result[i].date === date) {
-                        dataIndex = i;
-                        break;
-                    }
-                }
-                if(dataIndex >= 0) { // 有今天的存储记录
-                    result[dataIndex].datas.push(data);
-                }else{
-                    result.push(obj)
-                }
-            } else {
-                result = [obj];
-            }
+                        if(result) { // 有数据
+                            result = JSON.parse(result);
+                            let dataIndex = -1;
+                            let{date} = this.state;
+                            for(let i = 0; i < result.length; i++) {
+                                if(result[i].date === date) {
+                                    dataIndex = i;
+                                    break;
+                                }
+                            }
+                            if(dataIndex >= 0) { // 有今天的存储记录
+                                result[dataIndex].datas.splice(index,1);
+                            }
+                            AsyncStorage.setItem('itemData',JSON.stringify(result));
+                            DeviceEventEmitter.emit('updateHome',result, date);
+                            //AsyncStorage.getItem('itemData',(err,result)=>{console.warn(result)})
+                        }
 
-            AsyncStorage.setItem('itemData',JSON.stringify(result));
-            DeviceEventEmitter.emit('updateHome',result);
-            //AsyncStorage.getItem('itemData',(err,result)=>{console.warn(result)})
-
-        })
+                    })
+                }}
+            ]
+        );
     }
 
     _renderItem({item,index}) {
 
         return(
-            <TouchableOpacity activeOpacity={0.8} onLongPress={()=>console.warn('1')} style={styles.itemContainer}>
+            <TouchableOpacity activeOpacity={0.8} onLongPress={()=>this.deleteData(index)} style={styles.itemContainer}>
                 <Icon name={item.icon} style={styles.itemIcon}/>
                 <Text style={styles.itemText}>{item.name}</Text>
                 <Text style={[styles.itemText,{fontSize:18,color:'#111',position:'absolute',right:10}]}>{item.money}</Text>
