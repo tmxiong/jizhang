@@ -38,10 +38,14 @@ export default class App extends Component<Props> {
         //AsyncStorage.clear();
         this._setData(this.state.date);
 
-        this.ls = DeviceEventEmitter.addListener('updateHome',(data, date)=>{
+        this.ls = DeviceEventEmitter.addListener('update',(data, date)=>{
             this.setState({date:date});
             this._setData(date);
         })
+    }
+
+    componentWillUnmount() {
+        this.ls.remove();
     }
 
     componentWillUnmount() {
@@ -93,7 +97,7 @@ export default class App extends Component<Props> {
                                 result[dataIndex].datas.splice(index,1);
                             }
                             AsyncStorage.setItem('itemData',JSON.stringify(result));
-                            DeviceEventEmitter.emit('updateHome',result, date);
+                            DeviceEventEmitter.emit('update',result, date);
                             //AsyncStorage.getItem('itemData',(err,result)=>{console.warn(result)})
                         }
 
@@ -159,7 +163,6 @@ export default class App extends Component<Props> {
                             alignItems: 'center',
                             justifyContent: 'center',
                         }}>
-                            {/*<Text style={{color: '#fff'}}>2018-12-12</Text>*/}
                             <DatePicker
                                 style={{width: 200,borderColor:'transparent'}}
                                 date={this.state.date}

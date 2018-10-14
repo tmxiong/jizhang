@@ -4,6 +4,11 @@ const picWidth = 750;
 const {width} = require('Dimensions').get('window');
 const {height} = require('Dimensions').get('window');
 
+import{
+    PixelRatio,
+    StatusBar
+} from 'react-native'
+
 Date.prototype.Format = function (fmt) { //author: meizz
     var o = {
         "M+": this.getMonth() + 1, //月份
@@ -44,5 +49,19 @@ module.exports = {
         return width;
     },
 
-    baseColor: '#0094ff'
+    baseColor: '#0094ff',
+
+    goToPage(_this,route,params={}) {
+        _this.props.navigation.navigate(route, params)
+    },
+    goBack(_this){
+        _this.props.navigation.goBack();
+    },
+    px2dp(px) {
+        return PixelRatio.roundToNearestPixel(px);
+    },
+
+    statusBarHeight() {
+        return StatusBar.currentHeight;
+    }
 };

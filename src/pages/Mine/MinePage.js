@@ -7,23 +7,74 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import {Platform,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+    ScrollView
+} from 'react-native';
+import utils from '../../utils/utils'
+import Navbar from '../../component/NavBar'
+import Icon from 'react-native-vector-icons/Ionicons';
 
 type Props = {};
 export default class App extends Component<Props> {
+
+
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>我的</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+        <Navbar
+          leftIcon={null}
+          middleText={'我的'}
+        />
+
+          <ScrollView style={{width:'100%'}}>
+              <TouchableOpacity
+                  style={styles.items}
+                  activeOpacity={0.8}
+                  onPress={()=>utils.goToPage(this,'CalculatePage')}>
+                  <Icon style={styles.icon} name={"ios-log-in"} size={25}/>
+                  <Text style={styles.itemText}>贷款管理</Text>
+                  <Icon style={styles.arrowRight} name={'ios-arrow-forward'} size={25}/>
+              </TouchableOpacity>
+              <TouchableOpacity
+                  style={styles.items}
+                  activeOpacity={0.8}
+                  onPress={()=>utils.goToPage(this,'CalculatePage')}>
+                  <Icon style={styles.icon} name={"ios-log-out"} size={25}/>
+                  <Text style={styles.itemText}>投资管理</Text>
+                  <Icon style={styles.arrowRight} name={'ios-arrow-forward'} size={25}/>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                  style={styles.items}
+                  activeOpacity={0.8}
+                  onPress={()=>utils.goToPage(this,'CalculatePage')}>
+                  <Icon style={styles.icon} name={"ios-calculator"} size={25}/>
+                  <Text style={styles.itemText}>计算器</Text>
+                  <Icon style={styles.arrowRight} name={'ios-arrow-forward'} size={25}/>
+              </TouchableOpacity>
+              <TouchableOpacity
+                  style={[styles.items,{marginTop:20}]}
+                  activeOpacity={0.8}
+                  onPress={()=>utils.goToPage(this,'AboutPage')}>
+                  <Icon style={styles.icon} name={"ios-alert"} size={25}/>
+                  <Text style={styles.itemText}>关于</Text>
+                  <Icon style={styles.arrowRight} name={'ios-arrow-forward'} size={25}/>
+              </TouchableOpacity>
+              <TouchableOpacity
+                  style={styles.items}
+                  activeOpacity={0.8}
+                  onPress={()=>utils.goToPage(this,'FeedbackPage')}>
+                  <Icon style={styles.icon} name={"ios-create"} size={25}/>
+                  <Text style={styles.itemText}>反馈</Text>
+                  <Icon style={styles.arrowRight} name={'ios-arrow-forward'} size={25}/>
+              </TouchableOpacity>
+          </ScrollView>
+
       </View>
     );
   }
@@ -32,10 +83,33 @@ export default class App extends Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
+      // width:utils.deviceWidth()
   },
+    items:{
+        width:"100%",
+        height:utils.picHeight(100),
+        backgroundColor:'#fff',
+        borderBottomColor:'#e9e9e9',
+        borderBottomWidth:1,
+        flexDirection:'row',
+        alignItems:'center',
+
+    },
+    icon:{
+        width:50,
+        textAlign:'center',
+        color:'#666'
+    },
+    arrowRight:{
+      color:'#999',
+        position:'absolute',
+        right:10
+    },
+    itemText:{
+      color:'#333'
+    },
   welcome: {
     fontSize: 20,
     textAlign: 'center',

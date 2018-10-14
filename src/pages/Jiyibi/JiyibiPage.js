@@ -25,6 +25,7 @@ import utils from '../../utils/utils'
 import NavBar from '../../component/NavBar';
 import JiyibiItem from '../../component/JiyibiItem';
 import Icon from 'react-native-vector-icons/Ionicons';
+import DatePicker from 'react-native-datepicker'
 type Props = {};
 export default class App extends Component<Props> {
   static defaultProps = {
@@ -32,8 +33,11 @@ export default class App extends Component<Props> {
   };
   constructor(props) {
     super(props);
+      this.currentDate = new Date().Format("yyyy-MM-dd");
     this.state = {
+        date: this.currentDate,
         modalVisible: false,
+        outlayActive: true,
         items:null,
         moneyCount: '0',
         doneText:'完成',
@@ -46,7 +50,7 @@ export default class App extends Component<Props> {
   }
 
   componentDidMount() {
-      this.renderItems();
+      this.renderItems(outlayItemsConfig);
     this.ls = DeviceEventEmitter.addListener('showJiyibi',(isShow)=>{
       this.setState({
           modalVisible: isShow
@@ -54,7 +58,12 @@ export default class App extends Component<Props> {
       if(!isShow) {
           this.startInputAnim(0);
       }
-    })
+      if(!this.state.outlayActive){
+          this.setState({outlayActive:true});
+          this.renderItems(outlayItemsConfig);
+          this.jizhangType = 'outlay'
+      }
+    });
       this.ls1 = DeviceEventEmitter.addListener('setItem',(data)=>{
           this.itemData = data;
           this.startInputAnim(1);
@@ -66,8 +75,8 @@ export default class App extends Component<Props> {
     this.ls1.remove();
   }
 
-  renderItems() {
-      let items = itemsConfig.map((item, index) => {
+  renderItems(config) {
+      let items = config.map((item, index) => {
           return <JiyibiItem key={index} name={item.name} icon={item.icon} />
       });
 
@@ -120,6 +129,7 @@ export default class App extends Component<Props> {
     }
 
     closeModal() {
+
         let value = this.inputAnim.__getValue();
         if(value === 1) {
             this.startInputAnim(0);
@@ -149,7 +159,7 @@ export default class App extends Component<Props> {
                       break;
                   }
               }
-              if(dataIndex >= 0) { // 有今天的存储记录
+              if(dataIndex >= 0) { // 有该日期的存储记录
                   result[dataIndex].datas.push(data);
               }else{
                   result.push(obj)
@@ -159,7 +169,7 @@ export default class App extends Component<Props> {
           }
 
           AsyncStorage.setItem('itemData',JSON.stringify(result));
-          DeviceEventEmitter.emit('updateHome',result, date);
+          DeviceEventEmitter.emit('update',result, date);
           //AsyncStorage.getItem('itemData',(err,result)=>{console.warn(result)})
 
       })
@@ -183,14 +193,14 @@ export default class App extends Component<Props> {
       //         date: '2018-09-09',
       //         datas: [
       //             {
-      //                 name:'',
+      //                 name:'111',
       //                 icon:'',
       //                 date:'',
       //                 type:'',
       //                 money:'',
       //             },
       //             {
-      //                 name:'',
+      //                 name:'222',
       //                 icon:'',
       //                 date:'',
       //                 type:'',
@@ -213,7 +223,7 @@ export default class App extends Component<Props> {
 
                   // 关闭并保存记账数据
                   this.closeModal();
-                  this.itemData.date = new Date().Format('yyyy-MM-dd');
+                  this.itemData.date = this.state.date;
                   this.itemData.money = this.jizhangType === "outlay" ? "-"+moneyCount : "+"+moneyCount;
                   this.itemData.type = this.jizhangType;
                   this.saveData(this.itemData);
@@ -299,6 +309,39 @@ export default class App extends Component<Props> {
 
   }
 
+    onMiddleItemPress(lr) {
+        let isOutlayActive = true;
+        let config = outlayItemsConfig;
+        if(lr === 'r') {
+            isOutlayActive = false;
+            config = incomeItemsConfig;
+            this.jizhangType = 'income';
+        }
+        this.setState({
+            outlayActive: isOutlayActive
+        });
+        this.renderItems(config);
+    }
+
+    renderMiddleView() {
+        return(
+            <View style={styles.middleContent}>
+                <TouchableOpacity onPress={()=>this.onMiddleItemPress('l')} activeOpacity={0.8}
+                                  style={[styles.middleTextContent,this.state.outlayActive && styles.middleActive]}>
+                    <Text style={[styles.middleText,this.state.outlayActive && styles.middleTextActive]}>支出</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>this.onMiddleItemPress('r')} activeOpacity={0.8}
+                                  style={[styles.middleTextContent,!this.state.outlayActive && styles.middleActive]}>
+                    <Text style={[styles.middleText,!this.state.outlayActive && styles.middleTextActive]}>收入</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
+    _onDateChange(date) {
+        this.setState({date: date});
+    }
+
   render() {
     return (
       <View style={styles.container}>
@@ -309,10 +352,51 @@ export default class App extends Component<Props> {
         >
             <NavBar
               leftIcon={null}
-              middleText={'记一笔'}
+              leftText={this.state.date}
+              middleView={this.renderMiddleView()}
               rightText={'取消'}
               rightFn={()=>this.closeModal()}
             />
+            <View style={{
+                width: utils.picWidth(130),
+                height: utils.picHeight(60),
+                alignItems: 'center',
+                justifyContent: 'center',
+                alignSelf:'flex-start',
+                position:'absolute',
+                left:10,
+                top:30,
+                backgroundColor:'transparent'
+            }}>
+                <DatePicker
+                    style={{width: 80,borderColor:'transparent'}}
+                    // date={this.state.date}
+                    mode="date"
+                    //placeholder="select date"
+                    format="YYYY-MM-DD"
+                    minDate="1999-01-01"
+                    maxDate={new Date().Format("yyyy-MM-dd")}
+                    confirmBtnText="确定"
+                    cancelBtnText="取消"
+                    showIcon={false}
+                    customStyles={{
+                        dateIcon: {
+                            position: 'absolute',
+                            left: 0,
+                            top: 4,
+                            marginLeft: 0
+                        },
+                        dateInput: {
+                            borderColor:'transparent'
+                        },
+                        dateText: {
+                            color:'transparent',
+                        }
+                        // ... You can check the source to find the other keys.
+                    }}
+                    onDateChange={this._onDateChange.bind(this)}
+                />
+            </View>
             <ScrollView>
               <View style={{flexDirection:'row',flexWrap:'wrap'}}>
                   {this.state.items}
@@ -464,11 +548,64 @@ const styles = StyleSheet.create({
       fontSize:22,
         color:'#111',
         fontWeight:'bold'
+    },
+
+
+    middleContent:{
+        width:utils.picWidth(250),
+        height:utils.picHeight(60),
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:'center',
+        backgroundColor: 'rgba(0,0,0,0.2)',
+        borderRadius:utils.picHeight(30),
+        borderColor:'#ddd',
+        borderWidth:1
+    },
+    middleText: {
+        textAlign:'center',
+        color:'#ddd'
+    },
+    middleTextContent:{
+        width:utils.picWidth(246/2),
+        alignItems:'center',
+        justifyContent:'center',
+        height:utils.picHeight(56),
+        borderRadius:utils.picHeight(30),
+    },
+    middleActive:{
+        backgroundColor:'#f5f5f5',
+    },
+    middleTextActive:{
+        color:utils.baseColor
     }
 
 });
 
-const itemsConfig = [
+const incomeItemsConfig = [
+    {
+        name:'贷款',
+        icon:'ios-cash'
+    },
+    {
+        name:'理财',
+        icon:'ios-albums'
+    },
+    {
+        name:'工资',
+        icon:'ios-card'
+    },
+    {
+        name:'兼职',
+        icon:'ios-person'
+    },
+    {
+        name:'其它',
+        icon:'ios-briefcase'
+    },
+];
+
+const outlayItemsConfig = [
     {
         name:'餐饮',
         icon:'ios-restaurant'

@@ -1,7 +1,5 @@
-import homeIcon from './home_icon.png'
+import feedbackImg from './feedback.jpg'
 
 module.exports = {
-    tabIcon:{
-        homeIcon,
-    }
+    feedbackImg: feedbackImg
 }

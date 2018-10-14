@@ -20,7 +20,11 @@ import HomePage from './pages/Home/HomePage'
 import TongjiPage from "./pages/Tongji/TongjiPage";
 import TixingPage from './pages/Tixing/TixingPage'
 import MinePage from './pages/Mine/MinePage'
-import JiyibiPage from './pages/Jiyibi/JiyibiPage'
+import CalculatePage from './pages/Mine/CalculatePage'
+import JiyibiPage from './pages/Jiyibi/JiyibiPage';
+import FeedbackPage from './pages/Mine/FeedbackPage'
+import AboutPage from './pages/Mine/AboutPage';
+import AddTixingPage from './pages/Tixing/AddTixingPage'
 
 import DetailPage from './pages/Home/DetailPage'
 // import Page1 from './page/Page1'
@@ -117,6 +121,10 @@ const TabContainer = createBottomTabNavigator(
 const Routes = {
     TabContainer:{screen: TabContainer},
     DetailPage:{screen:DetailPage},
+    CalculatePage:{screen:CalculatePage},
+    FeedbackPage:{screen:FeedbackPage},
+    AboutPage:{screen:AboutPage},
+    AddTixingPage:{screen:AddTixingPage},
     // PageList:{screen:PageList},
     // Page3:{screen:Page3},
     // Page4:{screen:Page4},

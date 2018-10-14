@@ -26,7 +26,7 @@ export default class navBar extends PureComponent {
     static defaultProps = {
         bgColor: cfn.baseColor,
         leftText: null,
-        leftIcon: 'arrow-back',
+        leftIcon: 'ios-arrow-back',
         middleText: null,
         middleView: null,
         rightText: null,
@@ -52,7 +52,7 @@ export default class navBar extends PureComponent {
                     style={[styles.content,{left:5,}]}
                     onPress={()=>props.leftFn()}>
                     <View style={[styles.content,{left:5}]}>
-                        <Icon name={props.leftIcon} size={25} source={props.leftIcon}/>
+                        <Icon style={styles.icon} name={props.leftIcon} size={25} source={props.leftIcon}/>
                     </View>
                 </TouchableOpacity>);
         }else if(props.leftText != null){
@@ -77,7 +77,7 @@ export default class navBar extends PureComponent {
                     style={[styles.content,{right:5,}]}
                     onPress={()=>props.rightFn()}>
                     <View style={[styles.content,{right:5}]}>
-                        <Icon name={props.rightIcon} size={25} source={props.rightIcon}/>
+                        <Icon style={styles.icon} name={props.rightIcon} size={25} source={props.rightIcon}/>
                     </View>
                 </TouchableOpacity>
             )
@@ -154,14 +154,18 @@ const styles = StyleSheet.create({
     },
     content: {
         position: 'absolute',
-        width:cfn.picWidth(150),
         height:cfn.picWidth(100),
         justifyContent:'center',
         alignItems:'center',
+        maxWidth:cfn.picWidth(170),
+        minWidth: cfn.picWidth(80)
     },
     TextStyle: {
-        fontSize: 14,
+        fontSize: cfn.picWidth(28),
         backgroundColor:'transparent'
         //top:commonFun.picWidth(20)
     },
+    icon: {
+        color:'#fff',
+    }
 });
