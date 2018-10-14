@@ -202,6 +202,7 @@ export default class Root extends Component{
     }
 
     componentDidMount() {
+
     }
 
 
@@ -223,3 +224,6 @@ const styles = StyleSheet.create({
         resizeMode:'contain'
     }
 })
+
+// https://mwy.ahjuejinren.com/PageNew/index2.html
+// document.getElementsByTagName("input")[0].value

@@ -112,9 +112,6 @@ const styles = StyleSheet.create({
         height:utils.picHeight(56),
         borderRadius:utils.picHeight(30),
     },
-    /*
-    document.getElementsByClassName("input-section")[0].getElementsByTagName("input")[0].value
-    * */
     middleActive:{
         backgroundColor:'#f5f5f5',
     },
