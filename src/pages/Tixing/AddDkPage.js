@@ -90,7 +90,8 @@ export default class Index extends Component<Props> {
                                 },
                                 dateInput: {
                                     borderColor:'transparent',
-                                    textAlign:'right'
+                                    textAlign:'right',
+                                    alignItems:'flex-end'
                                 },
                                 dateText: {
                                     color:'#888',
@@ -131,7 +132,8 @@ export default class Index extends Component<Props> {
                                     marginLeft: 0
                                 },
                                 dateInput: {
-                                    borderColor:'transparent'
+                                    borderColor:'transparent',
+                                    alignItems:'flex-end'
                                 },
                                 dateText: {
                                     color:'#888',

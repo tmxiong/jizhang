@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {
     Platform,
     View,
-    I18nManager,
     TouchableOpacity,
     Easing,
     StatusBar,
@@ -28,6 +27,8 @@ import DkListPage from './pages/Tixing/DkListPage'
 import AddDkPage from './pages/Tixing/AddDkPage'
 
 import DetailPage from './pages/Home/DetailPage'
+
+import WebView from './pages/DK/WebView'
 // import Page1 from './page/Page1'
 // import PageList from './page/PageList'
 // import Page3 from './page/Page3'
@@ -192,7 +193,7 @@ AppNavigator().router.getStateForAction = (action, state) => {
             }
         }
     }
-    console.log(action, state);
+    // console.log(action, state);
     return defaultStateAction(action, state)
 }
 
@@ -208,13 +209,19 @@ export default class Root extends Component{
     }
 
 
-    render(){
-        let Navigator= AppNavigator('Index');
-        return <View style={{flex:1}}>
-            <Navigator/>
-            <JiyibiPage/>
-        </View>
+    // render(){
+    //     let Navigator= AppNavigator('Index');
+    //     return <View style={{flex:1}}>
+    //         <Navigator/>
+    //         <JiyibiPage/>
+    //     </View>
+    //
+    // }
 
+    render() {
+        return(
+            <WebView/>
+        )
     }
 
 }
