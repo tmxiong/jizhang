@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import utils from "../../utils/utils";
 import NavBar from '../../component/NavBar'
-import AddTixingPage from './AddTixingPage'
+import AddTixingPage from './DkListPage'
 
 type Props = {};
 export default class App extends Component<Props> {
@@ -55,7 +55,7 @@ export default class App extends Component<Props> {
 
     _add() {
         let type = this.state.leftActive ? '添加贷款提醒' : '添加理财提醒';
-        utils.goToPage(this,'AddTixingPage',{name:type})
+        utils.goToPage(this,'DkListPage',{name:type})
     }
 
     _renderItem({item, index}) {

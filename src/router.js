@@ -24,7 +24,8 @@ import CalculatePage from './pages/Mine/CalculatePage'
 import JiyibiPage from './pages/Jiyibi/JiyibiPage';
 import FeedbackPage from './pages/Mine/FeedbackPage'
 import AboutPage from './pages/Mine/AboutPage';
-import AddTixingPage from './pages/Tixing/AddTixingPage'
+import DkListPage from './pages/Tixing/DkListPage'
+import AddDkPage from './pages/Tixing/AddDkPage'
 
 import DetailPage from './pages/Home/DetailPage'
 // import Page1 from './page/Page1'
@@ -124,7 +125,8 @@ const Routes = {
     CalculatePage:{screen:CalculatePage},
     FeedbackPage:{screen:FeedbackPage},
     AboutPage:{screen:AboutPage},
-    AddTixingPage:{screen:AddTixingPage},
+    DkListPage:{screen:DkListPage},
+    AddDkPage:{screen:AddDkPage},
     // PageList:{screen:PageList},
     // Page3:{screen:Page3},
     // Page4:{screen:Page4},

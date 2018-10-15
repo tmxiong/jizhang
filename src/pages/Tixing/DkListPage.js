@@ -43,7 +43,7 @@ export default class App extends Component<Props> {
     _renderItem({item,index}) {
 
         return(
-            <TouchableOpacity activeOpacity={0.8} style={styles.itemContainer}>
+            <TouchableOpacity onPress={()=>utils.goToPage(this,'AddDkPage',{name: item.name})} activeOpacity={0.8} style={styles.itemContainer}>
                 <Image source={item.icon} style={styles.itemIcon}/>
                 <Text style={styles.itemText}>{item.name}</Text>
                 <Icon style={styles.rightIcon} name={'ios-arrow-forward'}/>
