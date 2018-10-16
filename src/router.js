@@ -25,6 +25,7 @@ import FeedbackPage from './pages/Mine/FeedbackPage'
 import AboutPage from './pages/Mine/AboutPage';
 import DkListPage from './pages/Tixing/DkListPage'
 import AddDkPage from './pages/Tixing/AddDkPage'
+import AddLcPage from './pages/Tixing/AddLcPage'
 
 import DetailPage from './pages/Home/DetailPage'
 
@@ -128,6 +129,7 @@ const Routes = {
     AboutPage:{screen:AboutPage},
     DkListPage:{screen:DkListPage},
     AddDkPage:{screen:AddDkPage},
+    AddLcPage:{screen:AddLcPage},
     // PageList:{screen:PageList},
     // Page3:{screen:Page3},
     // Page4:{screen:Page4},
@@ -209,20 +211,20 @@ export default class Root extends Component{
     }
 
 
-    // render(){
-    //     let Navigator= AppNavigator('Index');
-    //     return <View style={{flex:1}}>
-    //         <Navigator/>
-    //         <JiyibiPage/>
-    //     </View>
-    //
-    // }
+    render(){
+        let Navigator= AppNavigator('Index');
+        return <View style={{flex:1}}>
+            <Navigator/>
+            <JiyibiPage/>
+        </View>
 
-    render() {
-        return(
-            <WebView/>
-        )
     }
+
+    // render() {
+    //     return(
+    //         <WebView/>
+    //     )
+    // }
 
 }
 

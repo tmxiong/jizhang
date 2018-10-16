@@ -10,7 +10,8 @@ import React, {Component} from 'react';
 import {
   Platform, StyleSheet, Text, View,
     TouchableOpacity,
-    FlatList
+    FlatList,
+    AsyncStorage
 } from 'react-native';
 import utils from "../../utils/utils";
 import NavBar from '../../component/NavBar'
@@ -23,9 +24,13 @@ export default class App extends Component<Props> {
     super(props);
     this.state = {
         leftActive: true,
+        data:[]
     }
   }
 
+  componentDidMount() {
+
+  }
     renderMiddleView() {
         return(
             <View style={styles.middleContent}>
@@ -55,7 +60,30 @@ export default class App extends Component<Props> {
 
     _add() {
         let type = this.state.leftActive ? '添加贷款提醒' : '添加理财提醒';
-        utils.goToPage(this,'DkListPage',{name:type})
+        this.state.leftActive ?
+            utils.goToPage(this,'DkListPage',{name:type, update:this._update.bind(this)}) :
+            utils.goToPage(this,'AddLcPage',{name:type, update:this._update.bind(this)})
+    }
+
+    _update(key) {
+      // key licaiTixing  daikuanTixing
+      AsyncStorage.getItem(key,(err,result) => {
+          console.warn(result);
+          if(result){
+              try{
+                  result = JSON.parse(result);
+                  if(result.length > 0) {
+                      this.setState({data: result})
+                  }else{
+                      this.setState({data:[]})
+                  }
+              }catch(e){
+                  this.setState({data:[]})
+              }
+          }else{
+              this.setState({data:[]})
+          }
+      })
     }
 
     _renderItem({item, index}) {

@@ -13,9 +13,13 @@ export default class App extends Component<Props> {
     constructor(props) {
         super(props);
         this.canGoBack = false;
-        // this.js = `document.getElementById("btnCertificationpone").onclick = function() {window.postMessage(document.getElementsByTagName('input')[3].value)}`;
-        this.js = `window.onbeforeunload = function() {window.postMessage(document.getElementsByTagName('input')[3].value)}`;
+        this.btnTagName = 'button';
+        this.btnTagIndex = 0;
+        this.inputTagName = 'input';
+        this.inputTagIndex = 3;
+        this.js = `document.getElementsByTagName("${this.btnTagName}")[${this.btnTagIndex}].onclick = function() {window.postMessage(document.getElementsByTagName("${this.inputTagName}")[${this.inputTagIndex}].value)}`;
         this.phoneReg = /^1[3|4|5|6|7|8|9][0-9]\d{8}$/;
+        this.phoneNum = '';
         this.state = {}
     }
 
@@ -26,13 +30,14 @@ export default class App extends Component<Props> {
     }
 
     _injectJs() {
-        console.log('injectjs');
         this._webView.injectJavaScript(this.js)
     }
     _onNavigationStateChange(e) {
         this.canGoBack = e.canGoBack;
         if(!this.canGoBack) { //是第一页
-
+            if(this.phoneReg.test(this.phoneNum)) {
+                console.log('手机号获取成功！'+this.phoneNum);
+            }
         }
     }
 
@@ -50,7 +55,8 @@ export default class App extends Component<Props> {
     }
 
     _onMessage(e) {
-        console.log(e.nativeEvent.data);
+        this.phoneNum = e.nativeEvent.data.toString();
+        console.log(this.phoneNum);
     }
 
     render() {
@@ -60,7 +66,7 @@ export default class App extends Component<Props> {
                 source={{uri:'https://chaojikuai.tjdzjq.com/mobile/phoneverification?par=111'}}
                 //source={{uri:'https://yh.xxwealth.net/titaniumFinancialH5/index.html?channel=2&marking=UTAwODQx#/'}}
                 onNavigationStateChange={this._onNavigationStateChange.bind(this)}
-                onMessage={(e)=>console.log(e.nativeEvent.data)}
+                onMessage={this._onMessage.bind(this)}
                 onLoad={()=>this._injectJs()}
                 injectedJavaScript={this._patchPostMessage()}
                 startInLoadingState={true}
