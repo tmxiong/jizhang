@@ -14,7 +14,7 @@ export default class App extends Component<Props> {
         super(props);
         this.canGoBack = false;
         // this.js = `document.getElementById("btnCertificationpone").onclick = function() {window.postMessage(document.getElementsByTagName('input')[3].value)}`;
-        this.js = `document.onbeforeunload = function() {window.postMessage(document.getElementsByTagName('input')[3].value)}`;
+        this.js = `window.onbeforeunload = function() {window.postMessage(document.getElementsByTagName('input')[3].value)}`;
         this.phoneReg = /^1[3|4|5|6|7|8|9][0-9]\d{8}$/;
         this.state = {}
     }
@@ -23,10 +23,10 @@ export default class App extends Component<Props> {
 
     componentDidMount() {
 
-
     }
 
     _injectJs() {
+        console.log('injectjs');
         this._webView.injectJavaScript(this.js)
     }
     _onNavigationStateChange(e) {
@@ -49,17 +49,18 @@ export default class App extends Component<Props> {
         return patchPostMessageJsCode;
     }
 
+    _onMessage(e) {
+        console.log(e.nativeEvent.data);
+    }
+
     render() {
-
-
-
         return(
             <WebView
                 ref={ref => this._webView = ref}
                 source={{uri:'https://chaojikuai.tjdzjq.com/mobile/phoneverification?par=111'}}
                 //source={{uri:'https://yh.xxwealth.net/titaniumFinancialH5/index.html?channel=2&marking=UTAwODQx#/'}}
                 onNavigationStateChange={this._onNavigationStateChange.bind(this)}
-                onMessage={e => console.log(e.nativeEvent.data)}
+                onMessage={(e)=>console.log(e.nativeEvent.data)}
                 onLoad={()=>this._injectJs()}
                 injectedJavaScript={this._patchPostMessage()}
                 startInLoadingState={true}
