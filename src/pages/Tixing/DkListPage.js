@@ -41,9 +41,12 @@ export default class App extends Component<Props> {
 
 
     _renderItem({item,index}) {
-
+        const {state} = this.props.navigation;
         return(
-            <TouchableOpacity onPress={()=>utils.goToPage(this,'AddDkPage',{name: item.name})} activeOpacity={0.8} style={styles.itemContainer}>
+            <TouchableOpacity
+                onPress={()=>utils.goToPage(this,'AddDkPage',{name: item.name, update: state.params.update,key:state.key})}
+                activeOpacity={0.8}
+                style={styles.itemContainer}>
                 <Image source={item.icon} style={styles.itemIcon}/>
                 <Text style={styles.itemText}>{item.name}</Text>
                 <Icon style={styles.rightIcon} name={'ios-arrow-forward'}/>
@@ -52,6 +55,7 @@ export default class App extends Component<Props> {
     }
 
     render() {
+        console.log(this.props.navigation)
         return (
             <View style={styles.container}>
                 <NavBar
@@ -129,6 +133,7 @@ const dkConfig = [
     {name: '百度有钱花', icon:dkIcon.百度有钱花},
     {name: '安逸花', icon:dkIcon.安逸花},
     {name: '51人品贷', icon:dkIcon['51人品贷']},
+    {name: '其它平台', icon:dkIcon['其它平台']},
     // {name: '中国工商银行', icon:dkIcon.中国工商银行},
     // {name: '中国银行', icon:dkIcon.},
     // {name: '中国邮政储蓄银行', icon:dkIcon.},

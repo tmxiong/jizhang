@@ -20,5 +20,6 @@ module.exports = {
         '立即贷': require('./dkIcon/立即贷.png'),
         '融360': require('./dkIcon/融360.png'),
         '马上贷': require('./dkIcon/马上贷.png'),
+        '其它平台': require('./dkIcon/其它.png'),
     }
 }

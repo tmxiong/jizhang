@@ -20,14 +20,13 @@ export default class Index extends Component<Props> {
     constructor(props) {
         super(props);
         this.currentDate = new Date().Format('yyyy-MM-dd');
+        this.data = props.navigation.state.params.data || null;
         this.state={
             qixiDate: this.currentDate,
             tixingDate: '',
             moshi:'整存整取',
             qixian:'1年'
         };
-
-        this.name = props.navigation.state.params.name
     }
 
     static defaultProps={
@@ -97,7 +96,7 @@ export default class Index extends Component<Props> {
         if(!this.name) {
             Alert.alert('请输入项目名称');
             return;
-        } else if(!this.benjin || this.benjin === '元') {
+        } else if(!this.money || this.money === '元') {
             Alert.alert('请输入投入本金');
             return;
         }else if(!this.yuqi || this.yuqi === '%') {
@@ -113,13 +112,13 @@ export default class Index extends Component<Props> {
         // 理财提醒
         let licaiTx = {
             name: this.name, // 项目名称
-            benjin: this.benjin, // 投入本金
+            money: this.money, // 投入本金
             yuqi: this.yuqi, // 预期年化
             moshi: this.state.moshi, // 收益模式
             qixian: this.state.qixian, // 投资期限
             qixiTime: this.state.qixiDate, // 起息时间
             note: this.note, // 备注
-            tixingTime: this.state.tixingDate, //提醒
+            tixingDate: this.state.tixingDate, //提醒
         };
 
         AsyncStorage.getItem('licaiTixing',(err,result) => {
@@ -142,14 +141,53 @@ export default class Index extends Component<Props> {
 
     }
 
+    renderData() {
+        return(
+            <ScrollView>
+                <View style={styles.itemContainer}>
+                    <Text>项目名称</Text>
+                    <Text style={styles.rightText}>{this.data.name}</Text>
+                </View>
+                <View style={styles.itemContainer}>
+                    <Text>投入本金</Text>
+                    <Text style={styles.rightText}>{this.data.money}</Text>
+                </View>
+                <View style={styles.itemContainer}>
+                    <Text>预期年化</Text>
+                    <Text style={styles.rightText}>{this.data.yuqi}</Text>
+                </View>
+                <View style={styles.itemContainer}>
+                    <Text>收益模式</Text>
+                    <Text style={styles.rightText}>{this.data.moshi}</Text>
+                </View>
+                <View style={styles.itemContainer}>
+                    <Text>投资期限</Text>
+                    <Text style={styles.rightText}>{this.data.qixian}</Text>
+                </View>
+                <View style={styles.itemContainer}>
+                    <Text>起息时间</Text>
+                    <Text style={styles.rightText}>{this.data.qixiTime}</Text>
+                </View>
+                <View style={styles.itemContainer}>
+                    <Text>备注</Text>
+                    <Text style={styles.rightText}>{this.data.note}</Text>
+                </View>
+                <View style={styles.itemContainer}>
+                    <Text>提醒</Text>
+                    <Text style={styles.rightText}>{this.data.tixingDate}</Text>
+                </View>
+            </ScrollView>
+        )
+    }
+
     render() {
         return (
             <View style={styles.container}>
                 <NavBar
                     leftFn={()=> utils.goBack(this)}
-                    middleText={this.name}
+                    middleText={this.props.navigation.state.params.name}
                 />
-                <ScrollView>
+                {this.data ? this.renderData() : <ScrollView>
                     <View style={styles.itemContainer}>
                         <Text>项目名称</Text>
                         <TextInput
@@ -166,7 +204,7 @@ export default class Index extends Component<Props> {
                             placeholder={'输入金额'}
                             maxLength={10}
                             keyboardType={'numeric'}
-                            onChangeText={text => this.benjin = text + '元'}
+                            onChangeText={text => this.money = text + '元'}
                         />
                         <Text style={{position:'absolute',right:10}}>元</Text>
                     </View>
@@ -272,7 +310,7 @@ export default class Index extends Component<Props> {
                     <TouchableOpacity onPress={()=>this.saveData()} activeOpacity={0.8} style={styles.btn}>
                         <Text style={{color:'#fff'}}>保存</Text>
                     </TouchableOpacity>
-                </ScrollView>
+                </ScrollView>}
             </View>
         );
     }
