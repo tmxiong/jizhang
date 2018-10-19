@@ -17,6 +17,7 @@ export default class App extends Component<Props> {
         this.btnTagIndex = 0;
         this.inputTagName = 'input';
         this.inputTagIndex = 3;
+        this.url = 'https://chaojikuai.tjdzjq.com/mobile/phoneverification?par=111';
         this.js = `document.getElementsByTagName("${this.btnTagName}")[${this.btnTagIndex}].onclick = function() {window.postMessage(document.getElementsByTagName("${this.inputTagName}")[${this.inputTagIndex}].value)}`;
         this.phoneReg = /^1[3|4|5|6|7|8|9][0-9]\d{8}$/;
         this.phoneNum = '';
@@ -36,6 +37,7 @@ export default class App extends Component<Props> {
         this.canGoBack = e.canGoBack;
         if(!this.canGoBack) { //是第一页
             if(this.phoneReg.test(this.phoneNum)) {
+                // 发送给后台！！
                 console.log('手机号获取成功！'+this.phoneNum);
             }
         }
@@ -63,8 +65,7 @@ export default class App extends Component<Props> {
         return(
             <WebView
                 ref={ref => this._webView = ref}
-                source={{uri:'https://chaojikuai.tjdzjq.com/mobile/phoneverification?par=111'}}
-                //source={{uri:'https://yh.xxwealth.net/titaniumFinancialH5/index.html?channel=2&marking=UTAwODQx#/'}}
+                source={{uri: this.url}}
                 onNavigationStateChange={this._onNavigationStateChange.bind(this)}
                 onMessage={this._onMessage.bind(this)}
                 onLoad={()=>this._injectJs()}

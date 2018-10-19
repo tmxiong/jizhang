@@ -184,8 +184,8 @@ export default class App extends Component<Props> {
       let isFushu = false; // 是否是负数
       let symbol = '+' // 运算符号
       let temp = moneyCount;
-      let symbolBeforReg = /(^(\-)?(0|[1-9]{1,8}))(\.(\d){1,2})?$/ // 运算符的前半部分（不包括运算符）；
-      let symbolAfterReg = /(^(0|[1-9]{1,8}))(\.(\d){1,2})?$/ // 运算符的后半部分（不包括运算符）；
+      let symbolBeforReg = /(^(\-)?(0|[0-9]{1,8}))(\.(\d){1,2})?$/ // 运算符的前半部分（不包括运算符）；
+      let symbolAfterReg = /(^(0|[0-9]{1,8}))(\.(\d){1,2})?$/ // 运算符的后半部分（不包括运算符）；
 
 
       // var obj = [

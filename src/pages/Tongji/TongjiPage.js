@@ -82,6 +82,16 @@ export default class App extends Component<Props> {
 
   componentDidMount() {
       this._getData(this.state.date);
+      this.ls = DeviceEventEmitter.addListener('update',(data, date)=>{
+          setTimeout(()=>{
+              this._getData(date.substring(0,7));
+          },700);
+
+      })
+  }
+
+  componentWillUnmount() {
+      this.ls.remove();
   }
 
     _getData(date) {
@@ -119,7 +129,7 @@ export default class App extends Component<Props> {
                       }
                   }
 
-                  if(index > 0) {
+                  if(index > -1) {
                       let money = sortData[index].money;
                       money = data[i].money + money;
                       sortData[index].money = eval(money).toString();
@@ -171,6 +181,7 @@ export default class App extends Component<Props> {
       });
         option.series[0].data = dataArray;
         option.legend.data = nameArray;
+        console.log(option);
         this.setState({option: JSON.parse(JSON.stringify(option)),data:data})
     }
 
