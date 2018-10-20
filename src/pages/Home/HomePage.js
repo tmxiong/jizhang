@@ -13,11 +13,13 @@ import {
     DeviceEventEmitter,
     FlatList,
     AsyncStorage,
-    Alert
+    Alert,
+    ImageBackground
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import utils from '../../utils/utils'
-import DatePicker from 'react-native-datepicker'
+import DatePicker from 'react-native-datepicker';
+import {bg} from '../../imgs/imgs'
 
 
 type Props = {};
@@ -146,7 +148,7 @@ export default class App extends Component<Props> {
 
     render() {
         return (
-            <View style={styles.container}>
+            <ImageBackground source={bg} style={styles.container}>
                 <View style={styles.header}>
                     <View style={{
                         height: utils.picHeight(150),
@@ -238,15 +240,15 @@ export default class App extends Component<Props> {
                         activeOpacity={0.8}
                         onPress={()=>DeviceEventEmitter.emit('showJiyibi')}
                         style={{width:'100%',flex:1,alignItems:'center',justifyContent:'center'}}>
-                        <Icon name='ios-paper' style={{fontSize:50,color:'#888',marginTop:100}}/>
-                        <Text style={{color:'#888',marginTop:5}}>没有数据哦~</Text>
-                        <Text style={{color:'#888',marginTop:5}}>点此去记一笔</Text>
+                        <Icon name='ios-paper' style={{fontSize:50,color:'#000529',marginTop:100}}/>
+                        <Text style={{color:'#000529',marginTop:5}}>没有数据哦~</Text>
+                        <Text style={{color:'#000529',marginTop:5}}>点此去记一笔</Text>
                     </TouchableOpacity>}
                 />
 
                 <StatusBar hidden={false} translucent={true} backgroundColor={'transparent'}
                            barStyle={'light-content'}/>
-            </View>
+            </ImageBackground>
         );
     }
 }
@@ -260,12 +262,13 @@ const styles = StyleSheet.create({
     header: {
         width: '100%',
         height: utils.picHeight(400),
-        backgroundColor: '#f90'
+        // backgroundColor: '#3d95f7',
+        backgroundColor: 'rgba(61,149,247,0.8)'
     },
     itemContainer: {
         width: '100%',
         height: utils.picHeight(120),
-        backgroundColor: '#fff',
+        backgroundColor: 'rgba(255,255,255,0.8)',
         borderBottomWidth: 1,
         borderBottomColor: '#e9e9e9',
         flexDirection: 'row',

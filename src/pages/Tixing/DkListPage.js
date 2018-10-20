@@ -16,11 +16,12 @@ import {
     DeviceEventEmitter,
     TouchableOpacity,
     FlatList,
-    Image
+    Image,
+    ImageBackground
 } from 'react-native';
 import NavBar from '../../component/NavBar'
 import utils from "../../utils/utils";
-import {dkIcon} from '../../imgs/imgs';
+import {dkIcon,bg} from '../../imgs/imgs';
 import Icon from 'react-native-vector-icons/Ionicons';
 type Props = {};
 export default class App extends Component<Props> {
@@ -57,7 +58,7 @@ export default class App extends Component<Props> {
     render() {
         console.log(this.props.navigation)
         return (
-            <View style={styles.container}>
+            <ImageBackground source={bg} style={styles.container}>
                 <NavBar
                     middleText={this.props.navigation.state.params.name}
                     leftFn={()=>utils.goBack(this)}
@@ -70,7 +71,7 @@ export default class App extends Component<Props> {
                     renderItem={this._renderItem.bind(this)}
                     ListEmptyComponent={()=><Text style={{color:'#aaa',alignSelf:'center',marginTop:200}}>暂无添加记录</Text>}
                 />
-            </View>
+            </ImageBackground>
         );
     }
 }
@@ -80,7 +81,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F5FCFF',
+        //backgroundColor: '#F5FCFF',
     },
     welcome: {
         fontSize: 20,

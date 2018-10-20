@@ -1,6 +1,8 @@
 import feedbackImg from './feedback.jpg'
+import bg from './bg.png'
 
 module.exports = {
+    bg: bg,
     feedbackImg: feedbackImg,
     dkIcon: {
         '51人品贷': require('./dkIcon/51人品贷.png'),

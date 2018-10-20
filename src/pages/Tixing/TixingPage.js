@@ -12,11 +12,13 @@ import {
     TouchableOpacity,
     FlatList,
     AsyncStorage,
-    Alert
+    Alert,
+    ImageBackground
 } from 'react-native';
 import utils from "../../utils/utils";
 import NavBar from '../../component/NavBar'
-import AddTixingPage from './DkListPage'
+import AddTixingPage from './DkListPage';
+import {bg} from '../../imgs/imgs'
 
 type Props = {};
 export default class App extends Component<Props> {
@@ -153,7 +155,7 @@ export default class App extends Component<Props> {
 
   render() {
     return (
-      <View style={styles.container}>
+      <ImageBackground source={bg} style={styles.container}>
           <NavBar
               middleView={this.renderMiddleView()}
               leftIcon={null}
@@ -167,12 +169,12 @@ export default class App extends Component<Props> {
               data={this.state.data}
               renderItem={this._renderItem.bind(this)}
               ListEmptyComponent={()=><TouchableOpacity onPress={()=>this._add()} style={{marginTop:200}}>
-                  <Text style={{color:'#aaa',alignSelf:'center',}}>暂无添加记录</Text>
-                  <Text style={{color:'#aaa',alignSelf:'center',marginTop:5}}>点我添加提醒</Text>
+                  <Text style={{color:'#000529',alignSelf:'center',}}>暂无添加记录</Text>
+                  <Text style={{color:'#000529',alignSelf:'center',marginTop:5}}>点我添加提醒</Text>
               </TouchableOpacity>}
           />
 
-      </View>
+      </ImageBackground>
     );
   }
 }

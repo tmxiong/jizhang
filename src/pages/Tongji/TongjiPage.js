@@ -12,13 +12,15 @@ import {
     StyleSheet,
     Text,
     View,
-    TouchableOpacity, AsyncStorage, DeviceEventEmitter
+    TouchableOpacity, AsyncStorage, DeviceEventEmitter,
+    ImageBackground
 } from 'react-native';
 import Navbar from '../../component/NavBar'
 import Echarts from 'native-echarts';
 import Icon from 'react-native-vector-icons/Ionicons';
 import utils from '../../utils/utils';
 import DatePicker from 'react-native-datepicker'
+import {bg} from '../../imgs/imgs'
 
 let option = {
     title : {
@@ -221,7 +223,7 @@ export default class App extends Component<Props> {
 
   render() {
     return (
-      <View style={styles.container}>
+      <ImageBackground source={bg} style={styles.container}>
           <Navbar
               leftIcon={null}
               leftText={this.state.date}
@@ -276,13 +278,13 @@ export default class App extends Component<Props> {
                       activeOpacity={0.8}
                       onPress={()=>DeviceEventEmitter.emit('showJiyibi')}
                       style={{alignItems:'center',justifyContent:'center',marginTop:200}}>
-                      <Icon name='ios-paper' style={{fontSize:50,color:'#888'}}/>
-                      <Text style={{color:'#888',marginTop:5}}>没有数据哦~</Text>
-                      <Text style={{color:'#888',marginTop:5}}>点此去记一笔</Text>
+                      <Icon name='ios-paper' style={{fontSize:50,color:'#000529'}}/>
+                      <Text style={{color:'#000529',marginTop:5}}>没有数据哦~</Text>
+                      <Text style={{color:'#000529',marginTop:5}}>点此去记一笔</Text>
                   </TouchableOpacity> :
               <Echarts option={this.state.option} height={utils.deviceHeight()-100}/>}
           </View>
-      </View>
+      </ImageBackground>
     );
   }
 }
@@ -291,7 +293,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    // backgroundColor: '#F5FCFF',
   },
   middleContent:{
       width:utils.picWidth(250),
