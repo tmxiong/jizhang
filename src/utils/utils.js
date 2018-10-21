@@ -49,7 +49,8 @@ module.exports = {
         return width;
     },
 
-    baseColor: '#0094ff',
+    baseColor: '#d4382a',
+    // baseColor: '#0094ff',
 
     goToPage(_this,route,params={}) {
         _this.props.navigation.navigate(route, params)

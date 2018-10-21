@@ -1,0 +1,14 @@
+{
+  "appApiConfigAndroid":{
+    "app_version_id":10,
+    "app_version":2.2,
+    "app_id":7,
+    "app_name_en":"jiedaihua20180926",
+    "install_source_channel_id":2,
+    "source_channel_name_en":"apple_store",
+    "app_platform":2,
+    "platform":2
+  },
+  "requestParamAndroid":"app_platform=2&app_version_id=10&app_version=2.2&app_id=7&app_name_en=jiedaihua20180926&install_source_channel_id=2&source_channel_name_en=apple_store&platform=2",
+  "requestDomainAndroid":"https://loanindex.yunxinsky.com"
+}

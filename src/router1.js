@@ -11,37 +11,40 @@ import {
 } from 'react-native';
 import { createStackNavigator,createBottomTabNavigator,NavigationActions } from 'react-navigation';
 // import CardStackStyleInterpolator from 'react-navigation/src/views/StackView/StackViewStyleInterpolator';
-import {tabIcon} from './imgs/imgs'
+import {tabIcon} from './pages/daikuan/imgs/imgs'
 import Icon from 'react-native-vector-icons/Ionicons';
-import utils from './utils/utils'
-import Tab from './component/Tab'
-import LaunchScreen from './pages/LaunchScreen/LaunchScreen'
-import HomePage from './pages/jizhang/Home/HomePage'
+import utils from './pages/daikuan/utils/utils'
+import Tab from './pages/daikuan/component/Tab'
+import LaunchScreen from './pages/daikuan/pages/LaunchScreen/LaunchScreen'
+import HomePage from './pages/daikuan/pages/jizhang/Home/HomePage'
 import TongjiPage from "./pages/jizhang/Tongji/TongjiPage";
-import TixingPage from './pages/jizhang/Tixing/TixingPage'
-import MinePage from './pages/jizhang/Mine/MinePage'
-import CalculatePage from './pages/jizhang/Mine/CalculatePage'
-import JiyibiPage from './pages/jizhang/Jiyibi/JiyibiPage';
-import FeedbackPage from './pages/jizhang/Mine/FeedbackPage'
-import AboutPage from './pages/jizhang/Mine/AboutPage';
-import DkListPage from './pages/jizhang/Tixing/DkListPage'
-import AddDkPage from './pages/jizhang/Tixing/AddDkPage'
-import AddLcPage from './pages/jizhang/Tixing/AddLcPage'
+import TixingPage from './pages/daikuan/pages/jizhang/Tixing/TixingPage'
+import MinePage from './pages/daikuan/pages/jizhang/Mine/MinePage'
+import CalculatePage from './pages/daikuan/pages/jizhang/Mine/CalculatePage'
+import JiyibiPage from './pages/daikuan/pages/jizhang/Jiyibi/JiyibiPage';
+import FeedbackPage from './pages/daikuan/pages/jizhang/Mine/FeedbackPage'
+import AboutPage from './pages/daikuan/pages/jizhang/Mine/AboutPage';
+import DkListPage from './pages/daikuan/pages/jizhang/Tixing/DkListPage'
+import AddDkPage from './pages/daikuan/pages/jizhang/Tixing/AddDkPage'
+import AddLcPage from './pages/daikuan/pages/jizhang/Tixing/AddLcPage'
 
-import DetailPage from './pages/jizhang/Home/DetailPage'
+import DetailPage from './pages/daikuan/pages/jizhang/Home/DetailPage'
 
-import WebView from './pages/jizhang/DK/WebView';
-
-
+import WebView from './pages/daikuan/pages/jizhang/DK/WebView';
 
 
 
 
 
 
+
+
+
+
+
+import AfNavScreen from './pages/daikuan/View/AfLoan/AfNavScreen.js'
 import BeLoginScreen from './pages/daikuan/View/BeLoan/BeLoginScreen';
 import AfSignInScreen from './pages/daikuan/View/AfLoan/AfSignInScreen';
-import AfNavScreen from './pages/daikuan/View/AfLoan/AfNavScreen.js';
 import AfIndexScreen from './pages/daikuan/View/AfLoan/AfIndexScreen';
 import AfLoanListScreen from './pages/daikuan/View/AfLoan/AfLoanListScreen';
 import AfLoanListModeScreen from './pages/daikuan/View/AfLoan/AfLoanListModeScreen';
@@ -68,11 +71,11 @@ const TransitionConfiguration = () => {
     };
 };
 
-// const StackOptions = ({navigation}) => {
-//     const gesturesEnabled = false;
-//     const header = null
-//     return {gesturesEnabled,header}
-// };
+const StackOptions = ({navigation}) => {
+    const gesturesEnabled = false;
+    const header = null
+    return {gesturesEnabled,header}
+};
 
 
 const TabContainer = createBottomTabNavigator(
@@ -135,15 +138,15 @@ const TabContainer = createBottomTabNavigator(
     });
 
 const Routes = {
-    LaunchScreen:{screen: LaunchScreen,navigationOptions:{header:null}},
-    TabContainer:{screen: TabContainer,navigationOptions:{header:null}},
-    DetailPage:{screen:DetailPage,navigationOptions:{header:null}},
-    CalculatePage:{screen:CalculatePage,navigationOptions:{header:null}},
-    FeedbackPage:{screen:FeedbackPage,navigationOptions:{header:null}},
-    AboutPage:{screen:AboutPage,navigationOptions:{header:null}},
-    DkListPage:{screen:DkListPage,navigationOptions:{header:null}},
-    AddDkPage:{screen:AddDkPage,navigationOptions:{header:null}},
-    AddLcPage:{screen:AddLcPage,navigationOptions:{header:null}},
+    LaunchScreen:{screen: LaunchScreen},
+    TabContainer:{screen: TabContainer},
+    DetailPage:{screen:DetailPage},
+    CalculatePage:{screen:CalculatePage},
+    FeedbackPage:{screen:FeedbackPage},
+    AboutPage:{screen:AboutPage},
+    DkListPage:{screen:DkListPage},
+    AddDkPage:{screen:AddDkPage},
+    AddLcPage:{screen:AddLcPage},
 
 
 
@@ -199,7 +202,6 @@ const Routes = {
         screen: AfNormalWebScreen
     },
 
-
     // PageList:{screen:PageList},
     // Page3:{screen:Page3},
     // Page4:{screen:Page4},
@@ -231,7 +233,7 @@ const AppNavigator = (initialRoute = "Index")=>{//通过参数动态配置初始
             //     return {gesturesEnabled,header}
             // },
             navigationOptions: {
-                //header: null,
+                header: null,
             }
 
         }
