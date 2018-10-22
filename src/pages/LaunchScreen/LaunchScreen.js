@@ -126,7 +126,17 @@ export default class App extends Component<Props> {
 
             }else{
                 //其他情况跳转到审核前的界面
-                that.navToPage('AfSignIn');
+
+
+               if(!that.state.user_id){
+                 
+                    that.navToPage('AfSignIn');
+                }else{
+                    
+                    that.navToPage('TabContainer');
+                }
+
+                //that.navToPage('AfSignIn');
                 //that.navToPage('TabContainer');
 
             }
@@ -135,7 +145,7 @@ export default class App extends Component<Props> {
             //网络出错也跳转到审核界面
             //console.warn("跳转到审核界面");
 
-            that.navToPage('AfSignIn');
+            //that.navToPage('AfSignIn');
             //that.navToPage('TabContainer');
 
         });

@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { createStackNavigator,createBottomTabNavigator,NavigationActions } from 'react-navigation';
 // import CardStackStyleInterpolator from 'react-navigation/src/views/StackView/StackViewStyleInterpolator';
+import {Loading,EasyLoading} from './component/Loading'
 import {tabIcon} from './imgs/imgs'
 import Icon from 'react-native-vector-icons/Ionicons';
 import utils from './utils/utils'
@@ -287,6 +288,7 @@ export default class Root extends Component{
         return <View style={{flex:1}}>
             <Navigator/>
             <JiyibiPage/>
+            <Loading background={'transparent'}/>
         </View>
 
     }

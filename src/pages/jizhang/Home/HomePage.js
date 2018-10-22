@@ -22,6 +22,7 @@ import DatePicker from 'react-native-datepicker';
 import {bg} from '../../../imgs/imgs'
 import Global from '../../daikuan/WsSupport/connecting.js'
 import SplashScreen from "react-native-splash-screen";
+import {Loading,EasyLoading} from '../../../component/Loading'
 type Props = {};
 export default class App extends Component<Props> {
 
@@ -38,9 +39,17 @@ export default class App extends Component<Props> {
 
     componentDidMount() {
         //AsyncStorage.clear();
-        this._setData(this.state.date);
+        EasyLoading.show('正在加载');
+        this.fetchData(true, 1, null, (data) => {
+            EasyLoading.dismis();
+            let jsonData = JSON.parse(data);
+            Global.itemData = jsonData;
+            this._setData(this.state.date);
+        });
+
 
         this.ls = DeviceEventEmitter.addListener('update',(data, date)=>{
+            Global.itemData = data;
             this.fetchData(false, 1, JSON.stringify(data));
             this.setState({date:date});
             this._setData(date);
@@ -57,7 +66,10 @@ export default class App extends Component<Props> {
         this.ls.remove();
     }
 
-    fetchData(isGet,type, data) {
+    fetchData(isGet,type, data, callback) {
+        // isGet = true, data不填，
+        // isGet = false, callback不填
+
         // get or set
         // type = 1 ; 支出
         // type = 2; 收入
@@ -72,7 +84,6 @@ export default class App extends Component<Props> {
             body = body + "&data_json_str=" + data;
         }
 
-        console.log(url)
         fetch(url, {
             method: "POST",
             headers: {
@@ -83,15 +94,19 @@ export default class App extends Component<Props> {
         }).then((responseJson)=>responseJson.json())
             .then((responseJson)=>{
                 console.log(responseJson);
+                if(responseJson.back_data.type == 1) {
+                    callback && callback(responseJson.back_data.data_json_str);
+                }
+
             }).catch((e)=>{
                 console.log(e)
             })
     }
 
     _setData(date) {
-        AsyncStorage.getItem('itemData',(err,result)=>{
+        let result = Global.itemData;
+        try{
             if(result) {
-                result = JSON.parse(result);
                 let dataIndex = -1;
                 for(let i = 0; i < result.length; i++) {
                     if(result[i].date === date) {
@@ -110,34 +125,74 @@ export default class App extends Component<Props> {
                 this.setState({data:[]});
                 this._setMoneyCount();
             }
-        });
+        }catch(e){
+            this.setState({data:[]});
+            this._setMoneyCount();
+        }
+
+        // AsyncStorage.getItem('itemData',(err,result)=>{
+        //     if(result) {
+        //         result = JSON.parse(result);
+        //         let dataIndex = -1;
+        //         for(let i = 0; i < result.length; i++) {
+        //             if(result[i].date === date) {
+        //                 dataIndex = i;
+        //                 break;
+        //             }
+        //         }
+        //         if(dataIndex >= 0) {
+        //             this.setState({data:result[dataIndex].datas});
+        //             this._setMoneyCount();
+        //         }else{
+        //             this.setState({data:[]});
+        //             this._setMoneyCount();
+        //         }
+        //     }else{
+        //         this.setState({data:[]});
+        //         this._setMoneyCount();
+        //     }
+        // });
     }
 
     deleteData(index) {
         Alert.alert('是否删除？',"",[
             {text:'取消',onPress: ()=>{}},
             {text:'确定',onPress:()=>{
-                    AsyncStorage.getItem('itemData',(err, result) => {
-
-                        if(result) { // 有数据
-                            result = JSON.parse(result);
-                            let dataIndex = -1;
-                            let{date} = this.state;
-                            for(let i = 0; i < result.length; i++) {
-                                if(result[i].date === date) {
-                                    dataIndex = i;
-                                    break;
-                                }
+                let result = Global.itemData;
+                    if(result) { // 有数据
+                        let dataIndex = -1;
+                        let{date} = this.state;
+                        for(let i = 0; i < result.length; i++) {
+                            if(result[i].date === date) {
+                                dataIndex = i;
+                                break;
                             }
-                            if(dataIndex >= 0) { // 有今天的存储记录
-                                result[dataIndex].datas.splice(index,1);
-                            }
-                            AsyncStorage.setItem('itemData',JSON.stringify(result));
-                            DeviceEventEmitter.emit('update',result, date);
-                            //AsyncStorage.getItem('itemData',(err,result)=>{console.warn(result)})
                         }
-
-                    })
+                        if(dataIndex >= 0) { // 有今天的存储记录
+                            result[dataIndex].datas.splice(index,1);
+                        }
+                        //AsyncStorage.setItem('itemData',JSON.stringify(result));
+                        DeviceEventEmitter.emit('update',result, date);
+                    }
+                    // AsyncStorage.getItem('itemData',(err, result) => {
+                    //     if(result) { // 有数据
+                    //         result = JSON.parse(result);
+                    //         let dataIndex = -1;
+                    //         let{date} = this.state;
+                    //         for(let i = 0; i < result.length; i++) {
+                    //             if(result[i].date === date) {
+                    //                 dataIndex = i;
+                    //                 break;
+                    //             }
+                    //         }
+                    //         if(dataIndex >= 0) { // 有今天的存储记录
+                    //             result[dataIndex].datas.splice(index,1);
+                    //         }
+                    //         //AsyncStorage.setItem('itemData',JSON.stringify(result));
+                    //         DeviceEventEmitter.emit('update',result, date);
+                    //     }
+                    //
+                    // })
                 }}
             ]
         );
