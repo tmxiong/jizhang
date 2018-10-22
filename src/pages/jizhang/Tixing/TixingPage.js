@@ -19,7 +19,8 @@ import utils from "../../../utils/utils";
 import NavBar from '../../../component/NavBar'
 import AddTixingPage from './DkListPage';
 import {bg} from '../../../imgs/imgs'
-
+import Global from "../../daikuan/WsSupport/connecting";
+import {Loading,EasyLoading} from '../../../component/Loading'
 type Props = {};
 export default class App extends Component<Props> {
 
@@ -29,13 +30,36 @@ export default class App extends Component<Props> {
         leftActive: true,
         data:[]
     };
-    this.licaiTixing = null;
-    this.daikuanTixing = null
+    Global.licaiTixing = [];
+    Global.daikuanTixing = [];
+      this.licaiTixing = null;
+      this.daikuanTixing = null;
   }
 
   componentDidMount() {
-    this._update('daikuanTixing');
-
+      //this.fetchData(false, 4, '[]');
+      EasyLoading.show('正在加载');
+      let _this = this;
+      this.fetchData(true, 3, null ,(daikuan)=>{
+          if(daikuan) {
+              daikuan = JSON.parse(daikuan.data_json_str)
+          }else{
+              daikuan = []
+          }
+          this.daikuanTixing = Global.daikuanTixing = daikuan;
+          this._update('daikuanTixing');
+          _this.fetchData(true, 4, null, (licai) => {
+              console.log(licai);
+              EasyLoading.dismis();
+              if(licai) {
+                  console.log('licai',licai);
+                  licai = JSON.parse(licai.data_json_str)
+              }else{
+                  licai = [];
+              }
+              _this.licaiTixing = Global.licaiTixing = licai;
+          })
+      })
   }
     renderMiddleView() {
         return(
@@ -58,26 +82,83 @@ export default class App extends Component<Props> {
               leftActive:true,
           });
           if(!this.daikuanTixing) {
-              this._update('daikuanTixing')
+              EasyLoading.show('正在加载');
+              this.fetchData(true, 3, null, (data)=>{
+                  EasyLoading.dismis();
+                  if(data) {
+                      this.daikuanTixing = Global.daikuanTixing = JSON.parse(data.data_json_str);
+                      this._update('daikuanTixing')
+                  }else{
+                      this.daikuanTixing = Global.daikuanTixing=[];
+                  }
+              })
           }else{
               this.setState({
-                  data: this.daikuanTixing
+                  data: Global.daikuanTixing
               });
           }
 
       }else{
           this.setState({
               leftActive:false,
-          })
+          });
           if(!this.licaiTixing) {
-              this._update('licaiTixing')
+              EasyLoading.show('正在加载');
+              this.fetchData(true, 3, null, (data)=>{
+                  EasyLoading.dismis();
+                  if(data) {
+                      this.licaiTixing = Global.licaiTixing = JSON.parse(data.data_json_str);
+                      this._update('licaiTixing')
+                  }else{
+                      this.licaiTixing = Global.licaiTixing=[];
+                  }
+              })
+
           }else{
+              console.log(Global.licaiTixing);
               this.setState({
-                  data:this.licaiTixing
+                  data:Global.licaiTixing
               })
           }
 
       }
+    }
+
+    fetchData(isGet,type, data, callback) {
+        // isGet = true, data不填，
+        // isGet = false, callback不填
+
+        // get or set
+        // type = 1 ; 支出
+        // type = 2; 收入
+        // type = 3; 贷款提醒
+        // type = 4; 理财
+        let url = '';
+        let body = `type=${type}&phone_number=${Global.phone_number}`;
+        if(isGet) {
+            url = Global.requestDomain + "/Index/ZTest/getCostDetail";
+        } else {
+            url = Global.requestDomain + "/Index/ZTest/setCostDetail";
+            body = body + "&data_json_str=" + data;
+        }
+
+        fetch(url, {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: body
+        }).then((responseJson)=>responseJson.json())
+            .then((responseJson)=>{
+                console.log(responseJson);
+                if(responseJson.back_status == 1) {
+                    callback && callback(responseJson.back_data);
+                }
+
+            }).catch((e)=>{
+            console.log(e)
+        })
     }
 
     _add() {
@@ -88,41 +169,44 @@ export default class App extends Component<Props> {
     }
 
     _update(key) {
+      this.setState({data: key === 'licaiTixing' ? Global.licaiTixing : Global.daikuanTixing})
       // key licaiTixing  daikuanTixing
-      AsyncStorage.getItem(key,(err,result) => {
+      //AsyncStorage.getItem(key,(err,result) => {
           //console.warn(result);
-          if(result){
-              try{
-                  result = JSON.parse(result);
-                  if(result.length > 0) {
-                      this.setState({data: result});
-                      key === 'licaiTixing' ? this.licaiTixing = result : this.daikuanTixing = result;
-                  }else{
-                      this.setState({data:[]});
-                      key === 'licaiTixing' ? this.licaiTixing = [] : this.daikuanTixing = [];
-                  }
-              }catch(e){
-                  this.setState({data:[]});
-                  key === 'licaiTixing' ? this.licaiTixing = [] : this.daikuanTixing = [];
-              }
-          }else{
-              this.setState({data:[]});
-              key === 'licaiTixing' ? this.licaiTixing = [] : this.daikuanTixing = [];
-          }
-      })
+        // let result = Global.daikuanTixing;
+        //   if(result){
+        //       try{
+        //           if(result.length > 0) {
+        //               this.setState({data: result});
+        //               key === 'licaiTixing' ? this.licaiTixing = result : this.daikuanTixing = result;
+        //           }else{
+        //               this.setState({data:[]});
+        //               key === 'licaiTixing' ? this.licaiTixing = [] : this.daikuanTixing = [];
+        //           }
+        //       }catch(e){
+        //           this.setState({data:[]});
+        //           key === 'licaiTixing' ? this.licaiTixing = [] : this.daikuanTixing = [];
+        //       }
+        //   }else{
+        //       this.setState({data:[]});
+        //       key === 'licaiTixing' ? this.licaiTixing = [] : this.daikuanTixing = [];
+        //   }
+      //})
     }
     _deleteItem(index) {
       Alert.alert('是否删除？','',[
           {text:'取消',onPress:()=>{}},
           {text:'确定',onPress:()=>{
               if(this.state.leftActive) {
-                  this.daikuanTixing.splice(index,1);
-                  AsyncStorage.setItem('daikuanTixing',JSON.stringify(this.daikuanTixing));
-                  this.setState({data: this.daikuanTixing});
+                  Global.daikuanTixing.splice(index,1);
+                  this.fetchData(false, 3, JSON.stringify(Global.daikuanTixing))
+                  //AsyncStorage.setItem('daikuanTixing',JSON.stringify(this.daikuanTixing));
+                  this.setState({data: Global.daikuanTixing});
               }else{
-                  this.licaiTixing.splice(index,1);
-                  AsyncStorage.setItem('licaiTixing',JSON.stringify(this.licaiTixing));
-                  this.setState({data: this.licaiTixing});
+                  Global.licaiTixing.splice(index,1);
+                  this.fetchData(false, 4, JSON.stringify(Global.licaiTixing))
+                  //AsyncStorage.setItem('licaiTixing',JSON.stringify(this.licaiTixing));
+                  this.setState({data: Global.licaiTixing});
               }}},
       ])
     }

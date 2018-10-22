@@ -13,17 +13,43 @@ import {Platform,
     TouchableOpacity,
     View,
     ScrollView,
-    ImageBackground
+    ImageBackground,
+    Alert,
+    AsyncStorage
 } from 'react-native';
 import utils from '../../../utils/utils'
 import Navbar from '../../../component/NavBar'
 import Icon from 'react-native-vector-icons/Ionicons';
 import {bg} from '../../../imgs/imgs'
+import {NavigationActions, StackActions} from "react-navigation";
 
 type Props = {};
 export default class App extends Component<Props> {
 
 
+
+    _logout() {
+        Alert.alert('确定退出登录？',"",[
+            {text:'取消',onPress:()=>{}},
+            {text:'确定',onPress:()=>{
+                AsyncStorage.clear();
+                this.navToPage('AfSignIn');
+                }},
+        ])
+    }
+
+    navToPage(targetRouteName){
+
+        const {dispatch} = this.props.navigation;
+        //旧版本
+        const resetAction = StackActions.reset({
+            index: 0,
+            actions: [
+                NavigationActions.navigate({routeName: targetRouteName}),
+            ]
+        });
+        dispatch(resetAction);
+    }
 
   render() {
     return (
@@ -74,6 +100,15 @@ export default class App extends Component<Props> {
                   <Icon style={styles.icon} name={"ios-create"} size={25}/>
                   <Text style={styles.itemText}>反馈</Text>
                   <Icon style={styles.arrowRight} name={'ios-arrow-forward'} size={25}/>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                  activeOpacity={0.8}
+                  onPress={()=>this._logout()}
+                  style={{width:utils.deviceWidth() - 40,backgroundColor:'#ff374e',
+                      borderRadius:5,height:utils.picHeight(100),alignItems:'center',
+                      justifyContent:'center',alignSelf:'center',marginTop:20}}>
+                  <Text style={{color:'#fff'}}>退出登录</Text>
               </TouchableOpacity>
           </ScrollView>
 

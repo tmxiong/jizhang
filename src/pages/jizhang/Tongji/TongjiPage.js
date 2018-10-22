@@ -21,6 +21,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import utils from '../../../utils/utils';
 import DatePicker from 'react-native-datepicker'
 import {bg} from '../../../imgs/imgs'
+import Global from "../../daikuan/WsSupport/connecting";
 
 let option = {
     title : {
@@ -97,20 +98,18 @@ export default class App extends Component<Props> {
   }
 
     _getData(date) {
-        AsyncStorage.getItem('itemData',(err,result)=>{
-            if(result) {
-                result = JSON.parse(result);
-                let array = [];
-                for(let i = 0; i < result.length; i++) {
-                    if(result[i].date.substring(0,7) === date) {
-                        array = array.concat(result[i].datas)
-                    }
+      let result = Global.itemData;
+        if(result) {
+            let array = [];
+            for(let i = 0; i < result.length; i++) {
+                if(result[i].date.substring(0,7) === date) {
+                    array = array.concat(result[i].datas)
                 }
-                this._setData(array)
-            }else{
-                this._setData([])
             }
-        });
+            this._setData(array)
+        }else{
+            this._setData([])
+        }
     }
 
     _setData(data) {
@@ -170,6 +169,7 @@ export default class App extends Component<Props> {
         })
 
     }
+
 
     _setOption(data,option) {
 

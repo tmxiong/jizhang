@@ -26,6 +26,7 @@ import NavBar from '../../../component/NavBar';
 import JiyibiItem from '../../../component/JiyibiItem';
 import Icon from 'react-native-vector-icons/Ionicons';
 import DatePicker from 'react-native-datepicker'
+import Global from "../../daikuan/WsSupport/connecting";
 type Props = {};
 export default class App extends Component<Props> {
   static defaultProps = {
@@ -143,7 +144,8 @@ export default class App extends Component<Props> {
     }
 
     saveData(data) {
-      AsyncStorage.getItem('itemData',(err, result) => {
+      //AsyncStorage.getItem('itemData',(err, result) => {
+        let result = Global.itemData;
           let date = data.date;
           let obj = {
               date: date,
@@ -151,7 +153,6 @@ export default class App extends Component<Props> {
           };
 
           if(result) { // 有数据
-              result = JSON.parse(result);
               let dataIndex = -1;
               for(let i = 0; i < result.length; i++) {
                   if(result[i].date === date) {
@@ -168,11 +169,11 @@ export default class App extends Component<Props> {
               result = [obj];
           }
 
-          AsyncStorage.setItem('itemData',JSON.stringify(result));
+          //AsyncStorage.setItem('itemData',JSON.stringify(result));
           DeviceEventEmitter.emit('update',result, date);
           //AsyncStorage.getItem('itemData',(err,result)=>{console.warn(result)})
 
-      })
+      //})
     }
 
   onItemPress(itemType) {
@@ -313,9 +314,7 @@ export default class App extends Component<Props> {
         let isOutlayActive = true;
         let config = outlayItemsConfig;
         // tab 左右切换时， 关闭input
-        if(this.state.outlayActive && lr === 'l' || !this.state.outlayActive && lr === 'r') {
-            this.startInputAnim(0);
-        }
+        this.startInputAnim(0);
         if(lr === 'r') {
             isOutlayActive = false;
             config = incomeItemsConfig;

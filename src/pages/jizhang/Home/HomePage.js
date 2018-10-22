@@ -42,14 +42,22 @@ export default class App extends Component<Props> {
         EasyLoading.show('正在加载');
         this.fetchData(true, 1, null, (data) => {
             EasyLoading.dismis();
-            let jsonData = JSON.parse(data);
-            Global.itemData = jsonData;
+            if(data) {
+                data = data.data_json_str;
+                let jsonData = JSON.parse(data);
+                Global.itemData = jsonData;
+            }else {
+                Global.itemData = [];
+            }
             this._setData(this.state.date);
+
         });
 
 
         this.ls = DeviceEventEmitter.addListener('update',(data, date)=>{
+            console.log('date',date);
             Global.itemData = data;
+            console.log('data',data);
             this.fetchData(false, 1, JSON.stringify(data));
             this.setState({date:date});
             this._setData(date);
@@ -94,11 +102,12 @@ export default class App extends Component<Props> {
         }).then((responseJson)=>responseJson.json())
             .then((responseJson)=>{
                 console.log(responseJson);
-                if(responseJson.back_data.type == 1) {
-                    callback && callback(responseJson.back_data.data_json_str);
+                if(responseJson.back_status == 1) {
+                    callback && callback(responseJson.back_data);
                 }
 
             }).catch((e)=>{
+            EasyLoading.dismis();
                 console.log(e)
             })
     }
@@ -116,18 +125,18 @@ export default class App extends Component<Props> {
                 }
                 if(dataIndex >= 0) {
                     this.setState({data:result[dataIndex].datas});
-                    this._setMoneyCount();
+                    this._setMoneyCount(result[dataIndex].datas);
                 }else{
                     this.setState({data:[]});
-                    this._setMoneyCount();
+                    this._setMoneyCount([]);
                 }
             }else{
                 this.setState({data:[]});
-                this._setMoneyCount();
+                this._setMoneyCount([]);
             }
         }catch(e){
-            this.setState({data:[]});
-            this._setMoneyCount();
+            //this.setState({data:[]});
+            //this._setMoneyCount([]);
         }
 
         // AsyncStorage.getItem('itemData',(err,result)=>{
@@ -208,26 +217,28 @@ export default class App extends Component<Props> {
             </TouchableOpacity>
         );
     }
-    _setMoneyCount() {
-        let {data} = this.state;
-        let income = "0";
-        let outlay = "0";
-        if(data.length === 0) {
-            income = outlay = '0';
-        }else{
-            for(let i = 0; i < data.length; i++) {
-                let item = data[i];
-                if(item.type === 'outlay'){ // 支出
-                    outlay += item.money;
-                }else{
-                    income += item.money;
+    _setMoneyCount(data) {
+        try{
+            let income = "0";
+            let outlay = "0";
+            if(data.length === 0) {
+                income = outlay = '0';
+            }else{
+                for(let i = 0; i < data.length; i++) {
+                    let item = data[i];
+                    if(item.type === 'outlay'){ // 支出
+                        outlay += item.money;
+                    }else{
+                        income += item.money;
+                    }
                 }
             }
-        }
-        this.setState({
-            income: eval(income),
-            outlay: eval(outlay)
-        })
+            this.setState({
+                income: eval(income),
+                outlay: eval(outlay)
+            })
+        }catch(e){}
+
     }
 
     _onDateChange(date) {
@@ -292,7 +303,7 @@ export default class App extends Component<Props> {
                             justifyContent: 'center',
                             alignItems: 'center'
                         }}>
-                            <TouchableOpacity onPress={()=>this.fetchData(true, 1)}>
+                            <View>
                                 <Text style={{color: '#fff'}}>收入(元)</Text>
                                 <Text style={{
                                     fontSize: 30,
@@ -300,7 +311,7 @@ export default class App extends Component<Props> {
                                     color: '#fff',
                                     fontWeight: 'bold'
                                 }}>{this.state.income}</Text>
-                            </TouchableOpacity>
+                            </View>
                         </View>
                         <View style={{
                             width: '50%',

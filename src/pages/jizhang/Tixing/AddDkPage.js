@@ -13,6 +13,7 @@ import {
 import NavBar from '../../../component/NavBar'
 import utils from '../../../utils/utils'
 import DatePicker from 'react-native-datepicker'
+import Global from "../../daikuan/WsSupport/connecting";
 type Props = {};
 export default class Index extends Component<Props> {
 
@@ -66,29 +67,58 @@ export default class Index extends Component<Props> {
             count: this.count, //贷款账号
             money: this.money, // 贷款金额
             daoqiDate: this.state.daoqiDate, // 到期时间
-            note: this.state.note, // 备注
+            note: this.note, // 备注
             tixingDate: this.state.tixingDate, // 提醒时间
         };
 
-        AsyncStorage.getItem('daikuanTixing',(err,result) => {
-            if(result) {
-                try{
-                    result = JSON.parse(result);
-                }catch(e){
-                    result = []
-                }
-            }else{
-                result = [];
-            }
+            let result = Global.daikuanTixing;
             result.push(daikuanTx);
-            AsyncStorage.setItem('daikuanTixing',JSON.stringify(result))
-        });
+            this.fetchData(false, 3, JSON.stringify(result));
+            //AsyncStorage.setItem('daikuanTixing',JSON.stringify(result))
+
         setTimeout(()=>{
             const {navigation} = this.props;
             navigation.state.params.update('daikuanTixing');
             navigation.goBack(navigation.state.params.key);
         },300);
 
+    }
+
+    fetchData(isGet,type, data, callback) {
+        // isGet = true, data不填，
+        // isGet = false, callback不填
+
+        // get or set
+        // type = 1 ; 支出
+        // type = 2; 收入
+        // type = 3; 贷款提醒
+        // type = 4; 理财
+        let url = '';
+        let body = `type=${type}&phone_number=${Global.phone_number}`;
+        if(isGet) {
+            url = Global.requestDomain + "/Index/ZTest/getCostDetail";
+        } else {
+            url = Global.requestDomain + "/Index/ZTest/setCostDetail";
+            body = body + "&data_json_str=" + data;
+        }
+
+        fetch(url, {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: body
+        }).then((responseJson)=>responseJson.json())
+            .then((responseJson)=>{
+                console.log(responseJson);
+                if(responseJson.back_status == 1) {
+                    callback && callback(responseJson.back_data);
+                }
+
+            }).catch((e)=>{
+            console.log(e)
+        })
     }
 
     renderData() {

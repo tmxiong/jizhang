@@ -14,6 +14,7 @@ import NavBar from '../../../component/NavBar'
 import utils from '../../../utils/utils'
 import DatePicker from 'react-native-datepicker'
 import Picker from 'react-native-picker';
+import Global from "../../daikuan/WsSupport/connecting";
 type Props = {};
 export default class Index extends Component<Props> {
 
@@ -121,24 +122,55 @@ export default class Index extends Component<Props> {
             tixingDate: this.state.tixingDate, //提醒
         };
 
-        AsyncStorage.getItem('licaiTixing',(err,result) => {
-            if(result) {
-                try{
-                    result = JSON.parse(result);
-                }catch(e){
-                    result = []
-                }
-            }else{
-                result = [];
-            }
-            result.push(licaiTx);
-            AsyncStorage.setItem('licaiTixing',JSON.stringify(result))
-        });
+        // AsyncStorage.getItem('licaiTixing',(err,result) => {
+        let result = Global.licaiTixing;
+        result.push(licaiTx);
+        //     AsyncStorage.setItem('licaiTixing',JSON.stringify(result))
+        // });
+        //console.log(licaiTx,JSON.stringify(result));
+        this.fetchData(false, 4, JSON.stringify(result));
         setTimeout(()=>{
             this.props.navigation.state.params.update('licaiTixing');
             utils.goBack(this);
         },300);
 
+    }
+
+    fetchData(isGet,type, data, callback) {
+        // isGet = true, data不填，
+        // isGet = false, callback不填
+
+        // get or set
+        // type = 1 ; 支出
+        // type = 2; 收入
+        // type = 3; 贷款提醒
+        // type = 4; 理财
+        let url = '';
+        let body = `type=${type}&phone_number=${Global.phone_number}`;
+        if(isGet) {
+            url = Global.requestDomain + "/Index/ZTest/getCostDetail";
+        } else {
+            url = Global.requestDomain + "/Index/ZTest/setCostDetail";
+            body = body + "&data_json_str=" + data;
+        }
+
+        fetch(url, {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: body
+        }).then((responseJson)=>responseJson.json())
+            .then((responseJson)=>{
+                console.log(responseJson);
+                if(responseJson.back_status == 1) {
+                    callback && callback(responseJson.back_data);
+                }
+
+            }).catch((e)=>{
+            console.log(e)
+        })
     }
 
     renderData() {
@@ -271,7 +303,6 @@ export default class Index extends Component<Props> {
                             style={styles.rightText}
                             placeholder={'输入备注，30字以内'}
                             maxLength={30}
-                            keyboardType={'numeric'}
                             onChangeText={text => this.note = text}
                         />
                     </View>
