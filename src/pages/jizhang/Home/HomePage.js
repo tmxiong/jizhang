@@ -227,15 +227,17 @@ export default class App extends Component<Props> {
                 for(let i = 0; i < data.length; i++) {
                     let item = data[i];
                     if(item.type === 'outlay'){ // 支出
-                        outlay += item.money;
+                        // outlay += item.money;
+                        outlay = Number(outlay) + Number(item.money);
                     }else{
-                        income += item.money;
+                        // income += item.money;
+                        income = Number(income) + Number(item.money);
                     }
                 }
             }
             this.setState({
-                income: eval(income),
-                outlay: eval(outlay)
+                income: income == 0 ? "0" : '+' + income.toString(),
+                outlay: outlay.toString()
             })
         }catch(e){}
 

@@ -4,7 +4,9 @@ import {
     StyleSheet,
     Text,
     Image,
-    View,AsyncStorage
+    View,AsyncStorage,
+    NetInfo,
+    Alert
 } from 'react-native';
 
 import {NavigationActions,StackActions} from 'react-navigation';
@@ -12,6 +14,7 @@ import Global from '../daikuan/WsSupport/connecting.js';
 import DeviceInfo from 'react-native-device-info';
 import SplashScreen from 'react-native-splash-screen';
 const checkBg=require('../daikuan/Resource/images/load/loadbg.png');
+import {Loading,EasyLoading} from '../../component/Loading'
 type Props = {};
 export default class App extends Component<Props> {
 
@@ -52,16 +55,16 @@ export default class App extends Component<Props> {
 
     componentWillMount() {
         this.checkAppVerifyStatus();
-        //检查app审核状态
-        setTimeout(()=> {
 
-            //this.checkAppVerifyStatus();
-        }, 1000);
+    }
 
+    handleNetError() {
+        Alert.alert('网络连接失败，请重试',"",[{text:'好的',onPress:()=>{this.checkAppVerifyStatus();}}])
     }
 
     //检查app审核状态、版本开关、前后置注册开关
     checkAppVerifyStatus(){
+        EasyLoading.show('正在加载');
         var that = this;
         var url_fetch = Global.requestDomain+"/Index/Public/appInitData";
 
@@ -76,7 +79,8 @@ export default class App extends Component<Props> {
             },
             body: requestParam
         }).then((response) => response.json()).then((responseJson) => {
-             console.warn(responseJson);
+            EasyLoading.dismis();
+             //console.warn(responseJson);
             Global.app_version_status = 1;
             if( typeof(responseJson.app_version_status) !="undefied" && parseInt(responseJson.app_version_status) ==2){
                 Global.app_version_status = responseJson.app_version_status;
@@ -142,6 +146,8 @@ export default class App extends Component<Props> {
             }
         }).catch((error) => {
             console.warn(error);
+            EasyLoading.dismis();
+            this.handleNetError();
             //网络出错也跳转到审核界面
             //console.warn("跳转到审核界面");
 

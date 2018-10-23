@@ -132,8 +132,8 @@ export default class App extends Component<Props> {
 
                   if(index > -1) {
                       let money = sortData[index].money;
-                      money = data[i].money + money;
-                      sortData[index].money = eval(money).toString();
+                      money = Number(data[i].money) + Number(money);
+                      sortData[index].money = money;
                   } else {
                       sortData.push(data[i]);
                   }

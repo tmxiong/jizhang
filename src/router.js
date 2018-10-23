@@ -9,6 +9,8 @@ import {
     StyleSheet,
     Image,
 } from 'react-native';
+// import NetInfo from './utils/NetInfo';
+// NetInfo.registNetworkStateListener((netState)=>{console.log('netState',netState)},(netChange)=>{console.log('netChange',netChange)})
 import { createStackNavigator,createBottomTabNavigator,NavigationActions } from 'react-navigation';
 // import CardStackStyleInterpolator from 'react-navigation/src/views/StackView/StackViewStyleInterpolator';
 import {Loading,EasyLoading} from './component/Loading'
