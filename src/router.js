@@ -59,6 +59,10 @@ import AfThirdDetailScreen from './pages/daikuan/View/AfLoan/AfThirdDetailScreen
 import AfWebScreen from './pages/daikuan/View/AfLoan/AfWebScreen';
 import AfNormalWebScreen from './pages/daikuan/View/AfLoan/AfNormalWebScreen';
 
+
+
+import AppOneIndexScreen from './pages/daikuan/View/AppOne/AppOneIndexScreen';
+
 //实现定义某个页面的动画效果
 const TransitionConfiguration = () => {
     return {
@@ -202,6 +206,9 @@ const Routes = {
         screen: AfNormalWebScreen
     },
 
+    AppOneIndex: {
+        screen: AppOneIndexScreen
+    }
 
     // PageList:{screen:PageList},
     // Page3:{screen:Page3},
@@ -290,7 +297,7 @@ export default class Root extends Component{
         return <View style={{flex:1}}>
             <Navigator/>
             <JiyibiPage/>
-            <Loading background={'transparent'}/>
+            <Loading background={'transparent'} topOffset={utils.picHeight(150)}/>
         </View>
 
     }

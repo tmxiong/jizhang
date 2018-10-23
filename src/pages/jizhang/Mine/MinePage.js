@@ -106,7 +106,7 @@ export default class App extends Component<Props> {
                   activeOpacity={0.8}
                   onPress={()=>this._logout()}
                   style={{width:utils.deviceWidth() - 40,backgroundColor:'#ff374e',
-                      borderRadius:5,height:utils.picHeight(100),alignItems:'center',
+                      borderRadius:5,height:utils.picWidth(100),alignItems:'center',
                       justifyContent:'center',alignSelf:'center',marginTop:20}}>
                   <Text style={{color:'#fff'}}>退出登录</Text>
               </TouchableOpacity>

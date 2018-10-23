@@ -54,12 +54,18 @@ export default class App extends Component<Props> {
     static defaultProps = {};
 
     componentWillMount() {
-        this.checkAppVerifyStatus();
 
     }
 
+    componentDidMount() {
+
+        // this.handleNetError();
+        this.checkAppVerifyStatus();
+    }
+
     handleNetError() {
-        Alert.alert('网络连接失败，请重试',"",[{text:'好的',onPress:()=>{this.checkAppVerifyStatus();}}])
+        SplashScreen.hide();
+        Alert.alert('网络连接失败，请检查网络后重试',"",[{text:'好的',onPress:()=>{this.checkAppVerifyStatus();}}])
     }
 
     //检查app审核状态、版本开关、前后置注册开关
@@ -80,7 +86,8 @@ export default class App extends Component<Props> {
             body: requestParam
         }).then((response) => response.json()).then((responseJson) => {
             EasyLoading.dismis();
-             //console.warn(responseJson);
+            // /that.navToPage('AppOneIndex');return;
+             console.warn(responseJson);
             Global.app_version_status = 1;
             if( typeof(responseJson.app_version_status) !="undefied" && parseInt(responseJson.app_version_status) ==2){
                 Global.app_version_status = responseJson.app_version_status;

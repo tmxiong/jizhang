@@ -30,6 +30,7 @@ const clearPhoneImage = require('../../Resource/images/Af/clearPhoneImage.png');
 const verifyCodeBtnImage = require('../../Resource/images/Af/verifyCodeBtnImage.png');
 var Global = require('../../WsSupport/connecting');
 import Icon from 'react-native-vector-icons/Ionicons';
+import {Loading,EasyLoading} from '../../../../component/Loading'
 import SplashScreen from 'react-native-splash-screen';
 class AfSignInScreen extends React.Component {
    
@@ -249,6 +250,7 @@ class AfSignInScreen extends React.Component {
 
     //登录
     setLogin(){
+        EasyLoading.show('正在登录');
         console.warn(this.state.loginPhoneNumber);
         var that=this;
         if(that.state.is_agree==0){
@@ -276,7 +278,7 @@ class AfSignInScreen extends React.Component {
             },
             body: requestParam
         }).then((response) => response.json()).then((responseJson) => {
-            console.warn(responseJson);
+            EasyLoading.dismis();
 
             if( typeof(responseJson.back_status) !="undefied" && parseInt(responseJson.back_status) ==1){
                 Global.user_id=responseJson.back_data.id;
@@ -304,6 +306,7 @@ class AfSignInScreen extends React.Component {
             }
 
         }).catch((error) => {
+            EasyLoading.dismis();
                 console.warn(error);
 
         });
@@ -332,53 +335,57 @@ render() {
     // console.warn(that.state.user_id);
     // console.warn(that.state.phone_number);
     return (
-        <View style={styles.container}>
-            <Image source={signBg} style={styles.bgImage} resizeMode='stretch'>
+        <ScrollView bounces={false}>
+            <View style={styles.container}>
+                <Image source={signBg} style={styles.bgImage} resizeMode='stretch'>
 
-            </Image>
-            <View style={styles.signBox}>
-                <ImageBackground style={styles.signBoxInner} source={signInnerBg} resizeMode='stretch'>
-                    <View style={styles.signBoxInnerText}>
-                        <View style={styles.signBoxInnerInputBox1}>
-                              <View style={styles.Input1Box}>
+                </Image>
+                <View style={styles.signBox}>
+                    <ImageBackground style={styles.signBoxInner} source={signInnerBg} resizeMode='stretch'>
+                        <View style={styles.signBoxInnerText}>
+                            <View style={styles.signBoxInnerInputBox1}>
+                                <View style={styles.Input1Box}>
                                     <TextInput
                                         keyboardType="numeric"
                                         style={styles.input1Sty}  value={that.state.loginPhoneNumber}
                                         placeholder="请 输 入 手 机 号"  underlineColorAndroid='transparent'
                                         onChangeText ={(thisValue) => that.setLoginInPhoneNumber(thisValue)}
                                     />
-                              </View>
-                              <TouchableOpacity style={styles.clearPhoneInput} onPress={()=>that.clearPhoneInput()}>
-                                  <Image source={clearPhoneImage} style={styles.clearPhoneImage} resizeMode='stretch'></Image>
-                              </TouchableOpacity>
-                        </View>
-                        <View style={styles.signBoxInnerInputBox2}>
-                            <View style={styles.Input2Box}>
-                                <TextInput
-                                    style={styles.input2Sty}  value={that.state.verifyCode}
-                                    placeholder="请 输 入 验 证 码"  underlineColorAndroid='transparent'
-                                    onChangeText ={(thisVerifyCode) => that.setLoginInVerifyCode(thisVerifyCode)}
-                                />
+                                </View>
+                                <TouchableOpacity style={styles.clearPhoneInput} onPress={()=>that.clearPhoneInput()}>
+                                    <Image source={clearPhoneImage} style={styles.clearPhoneImage} resizeMode='stretch'></Image>
+                                </TouchableOpacity>
                             </View>
-                            <TouchableOpacity style={styles.getVerifyCodeBtn} onPress={()=>that.getVerifyCode()}>
-                                <ImageBackground source={verifyCodeBtnImage} style={styles.verifyCodeBtnImage} resizeMode='stretch'>
-                                     <View style={styles.verifyCodeNoticeBox}>
-                                        <Text  style={[styles.verifyCodeNotice,{'color':that.state.codeNoticeColor}]} >{that.state.verifyCodeNotice}</Text>
-                                     </View>
-                                </ImageBackground>
-                            </TouchableOpacity>
-                         </View>
-                        <TouchableOpacity style={styles.signBoxInnerInputBox3} onPress={()=>that.setLogin()}></TouchableOpacity>
-                        <View style={styles.signBoxInnerInputBox4}>
-                            {Global.app_version_status == 2?<TouchableOpacity style={styles.loginAgree} onPress={()=>that.setAgree()}><Image source={that.state.AgreeImage} style={styles.loginAgree} resizeMode='stretch'></Image></TouchableOpacity>:null}
-                            {Global.app_version_status == 2?<View style={styles.agreeTextBox}><Text style={styles.agreeText}>我已经阅读并同意《用户服务协议》</Text></View>:null}
+                            <View style={styles.signBoxInnerInputBox2}>
+                                <View style={styles.Input2Box}>
+                                    <TextInput
+                                        keyboardType="numeric"
+                                        style={styles.input2Sty}  value={that.state.verifyCode}
+                                        placeholder="请 输 入 验 证 码"  underlineColorAndroid='transparent'
+                                        onChangeText ={(thisVerifyCode) => that.setLoginInVerifyCode(thisVerifyCode)}
+                                    />
+                                </View>
+                                <TouchableOpacity style={styles.getVerifyCodeBtn} onPress={()=>that.getVerifyCode()}>
+                                    <ImageBackground source={verifyCodeBtnImage} style={styles.verifyCodeBtnImage} resizeMode='stretch'>
+                                        <View style={styles.verifyCodeNoticeBox}>
+                                            <Text  style={[styles.verifyCodeNotice,{'color':that.state.codeNoticeColor}]} >{that.state.verifyCodeNotice}</Text>
+                                        </View>
+                                    </ImageBackground>
+                                </TouchableOpacity>
+                            </View>
+                            <TouchableOpacity style={styles.signBoxInnerInputBox3} onPress={()=>that.setLogin()}></TouchableOpacity>
+                            <View style={styles.signBoxInnerInputBox4}>
+                                {Global.app_version_status == 2?<TouchableOpacity style={styles.loginAgree} onPress={()=>that.setAgree()}><Image source={that.state.AgreeImage} style={styles.loginAgree} resizeMode='stretch'></Image></TouchableOpacity>:null}
+                                {Global.app_version_status == 2?<View style={styles.agreeTextBox}><Text style={styles.agreeText}>我已经阅读并同意《用户服务协议》</Text></View>:null}
+
+                            </View>
 
                         </View>
-
-                    </View>
-                </ImageBackground>
+                    </ImageBackground>
+                </View>
             </View>
-        </View>
+        </ScrollView>
+
 
     );
   }

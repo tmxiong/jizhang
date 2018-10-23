@@ -28,7 +28,7 @@ export default class App extends Component<Props> {
 
     constructor(props) {
         super(props);
-        this.currentDate = new Date().Format("yyyy-MM-dd")
+        this.currentDate = new Date().Format("yyyy-MM-dd");
         this.state = {
             data:[], // 需要展示列表的数据
             income:'0',

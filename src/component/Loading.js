@@ -65,7 +65,7 @@ export class Loading extends PureComponent {
             <View style={[styles.container,
                 {height:SCREEN_HEIGHT - (this.props.topOffset || 0),
                     backgroundColor:this.props.background || '#E9E9EF'}]}>
-                <View style={[styles.load_box, this.props.loadingStyle]}>
+                <View style={[styles.load_box, this.props.loadingStyle,{marginTop:-this.props.topOffset || 0}]}>
                     <ActivityIndicator animating={true} color={this.props.color || '#FFF'} size={'large'} style={styles.load_progress} />
                     <Text style={[styles.load_text, this.props.textStyle]}>{this.state.text}</Text>
                 </View>

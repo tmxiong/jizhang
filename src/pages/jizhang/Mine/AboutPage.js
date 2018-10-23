@@ -10,7 +10,7 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import cfn from "../../../utils/utils";
 import NavBar from '../../../component/NavBar'
-
+import DeviceInfo from 'react-native-device-info'
 
 type Props = {};
 export default class App extends Component<Props> {
@@ -22,8 +22,8 @@ export default class App extends Component<Props> {
                     leftFn={()=>cfn.goBack(this)}
                     leftIcon={'ios-arrow-back'}
                 />
-                <Text style={styles.welcome}>现金管家</Text>
-                <Text style={styles.instructions}>1.0.1</Text>
+                <Text style={styles.welcome}>钱包管家</Text>
+                <Text style={styles.instructions}>v {DeviceInfo.getVersion()}</Text>
             </View>
         );
     }

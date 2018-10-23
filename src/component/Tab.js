@@ -70,7 +70,7 @@ export default class Tab extends Component {
             <TouchableOpacity
                 activeOpacity={0.8}
                 key={"centerView"}
-                style={{position:'absolute', bottom: utils.picWidth(30),
+                style={{position:'absolute', bottom: utils.isIphoneX() ? 40 :utils.picWidth(30),
                     left:(utils.deviceWidth()-utils.picWidth(110))/2,
                     // right:utils.deviceHeight()-utils.picWidth(100),
                     backgroundColor:'#efefef', width:utils.picWidth(110),borderRadius:utils.picWidth(110)/2,
@@ -113,10 +113,10 @@ export default class Tab extends Component {
 
         return (
             <View pointerEvents = {"box-none"}//此组件不接收点击事件 子组件可以点击
-                  style={{width:utils.deviceWidth(),backgroundColor:'#efefef'}} //添加其他style会失效！！！
+                  style={{width:utils.deviceWidth(),backgroundColor:'#efefef',height:utils.isIphoneX() ? 80:utils.picWidth(100)}} //添加其他style会失效！！！
             >
                 {/**其他正常View**/}
-                <View style={{width:utils.deviceWidth(), backgroundColor:'#efefef', position:'absolute', bottom:0,flexDirection:'row',}}>
+                <View style={{width:utils.deviceWidth(), backgroundColor:'#efefef', position:'absolute', bottom:utils.isIphoneX() ? 25:0,flexDirection:'row',}}>
                     {arr}
                 </View>
                 {/**中间凸起的view**/}

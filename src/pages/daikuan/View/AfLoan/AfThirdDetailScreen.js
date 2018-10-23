@@ -23,7 +23,7 @@ import {StackActions} from 'react-navigation';
 import cfn from '../../base/commonFun/commonFun';
 var Global = require('../../WsSupport/connecting');
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import {Loading,EasyLoading} from '../../../../component/Loading'
 class AfThirdDetailScreen extends React.Component {
    
   constructor(props) {
@@ -77,7 +77,7 @@ class AfThirdDetailScreen extends React.Component {
 
 
   componentDidMount() {
-
+      EasyLoading.show('正在加载');
       var that=this;
       console.warn(that.js);
       //console.warn(that.state.targetProduct);
@@ -119,8 +119,10 @@ class AfThirdDetailScreen extends React.Component {
 
   }
     _injectJs() {
-
         this._webView.injectJavaScript(this.js)
+    }
+    _onLoadEnd() {
+        EasyLoading.dismis();
     }
     _onNavigationStateChange(e) {
         var that = this;
@@ -199,9 +201,10 @@ class AfThirdDetailScreen extends React.Component {
     ref={ref => this._webView = ref}
     onNavigationStateChange={this._onNavigationStateChange.bind(this)}
     onMessage={this._onMessage.bind(this)}
-    onLoad={()=>this._injectJs()}
+    onLoad={()=>this._injectJs()} //成功的回调
+    onLoadEnd={()=>this._onLoadEnd()}
     injectedJavaScript={this._patchPostMessage()}
-    startInLoadingState={true}
+    startInLoadingState={false}
 
 
         />

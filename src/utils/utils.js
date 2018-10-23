@@ -6,7 +6,8 @@ const {height} = require('Dimensions').get('window');
 
 import{
     PixelRatio,
-    StatusBar
+    StatusBar,
+    Platform
 } from 'react-native'
 
 Date.prototype.Format = function (fmt) { //author: meizz
@@ -64,5 +65,29 @@ module.exports = {
 
     statusBarHeight() {
         return StatusBar.currentHeight;
-    }
+    },
+
+    // 是不是iPhoneX
+    isIphoneX() {
+        // iPhoneX
+        const X_WIDTH = 375;
+        const X_HEIGHT = 812;
+
+        const XR_WIDTH = 414;
+        const XR_HEIGHT = 896;
+
+        const XS_WIDTH = 375;
+        const XS_HEIGHT = 812;
+
+        const XS_MAX_WIDTH = 414;
+        const XS_MAX_HEIGHT = 896;
+
+        return (
+            Platform.OS === 'ios' &&
+            ((height === X_HEIGHT && width === X_WIDTH) || (height === X_WIDTH && width === X_HEIGHT)) ||
+            (height === XR_HEIGHT && width === XR_WIDTH) ||
+            (height === XS_HEIGHT && width === XS_WIDTH) ||
+            (height === XS_MAX_HEIGHT && width === XS_MAX_WIDTH)
+        );
+    },
 };
