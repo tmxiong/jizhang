@@ -105,11 +105,11 @@ class AfIndexScreen extends React.Component {
 
   componentDidMount() {
 
-      SplashScreen.hide();
+
 
   }
   componentWillMount(){
-
+      SplashScreen.hide();
   }
   componentDidUpdate() {
     

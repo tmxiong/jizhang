@@ -115,7 +115,7 @@ class AfThirdDetailScreen extends React.Component {
   }
 
   componentWillUnmount() {
-
+      EasyLoading.dismis();
 
   }
     _injectJs() {

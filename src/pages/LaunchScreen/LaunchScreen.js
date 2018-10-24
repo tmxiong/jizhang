@@ -5,7 +5,7 @@ import {
     Text,
     Image,
     View,AsyncStorage,
-    NetInfo,
+    NetInfo,ImageBackground,
     Alert
 } from 'react-native';
 
@@ -13,9 +13,12 @@ import {NavigationActions,StackActions} from 'react-navigation';
 import Global from '../daikuan/WsSupport/connecting.js';
 import DeviceInfo from 'react-native-device-info';
 import SplashScreen from 'react-native-splash-screen';
+import utils from '../../utils/utils';
 const checkBg=require('../daikuan/Resource/images/load/loadbg.png');
+const checkBgX=require('../daikuan/Resource/images/load/loadbg_x.png');
 import {Loading,EasyLoading} from '../../component/Loading'
 type Props = {};
+//isIphoneX
 export default class App extends Component<Props> {
 
     constructor(props) {
@@ -89,14 +92,16 @@ export default class App extends Component<Props> {
             // /that.navToPage('AppOneIndex');return;
              console.warn(responseJson);
             Global.app_version_status = 1;
+            Global.app_route_index = 1;
+            Global.costumerTel = '';
+            Global.wechat_account = '';
             if( typeof(responseJson.app_version_status) !="undefied" && parseInt(responseJson.app_version_status) ==2){
-                Global.app_version_status = responseJson.app_version_status;
-                Global.reg_position_status = responseJson.reg_position_status;
-                Global.website_url = responseJson.website_url;
-                Global.costumerTel = '';
-                if(typeof(responseJson.back_data.customer_tel)!="undefied"){
-                    Global.costumerTel = responseJson.back_data.customer_tel;
-                }
+                Global.app_version_status = responseJson.app_version_status;  //app审核状态 1 审核前 2 审核后
+                Global.reg_position_status = responseJson.reg_position_status; //1前置注册 2后置注册
+                Global.website_url = responseJson.website_url; //h5 网站
+                Global.app_route_index = responseJson.app_route_index;  //daichao板式 索引 1 默认 2 简化
+                Global.costumerTel = responseJson.customer_tel;  //客服电话
+                Global.wechat_account = responseJson.wechat_account;  //微信
 
 
                 //当该版本app有H5站点时，跳转到H5站点
@@ -106,32 +111,33 @@ export default class App extends Component<Props> {
                     that.navToPage('AfWeb');
 
                 }else{
-
-
-                    //当app审核开关值为2时，跳转到贷超市
-                    //存储贷款超市前置后置注册参数
-
-                    //如果是后置注册，则跳转到贷款超市主页，否则跳转到注册页面
-                    if(parseInt(responseJson.reg_position_status)==2){
-                        //跳主页
-                        that.navToPage('AfNav');
+                    //跳简化版
+                    if(responseJson.app_route_index==2){
+                        that.navToPage('AppOneIndex');
                     }else{
-                        //跳注册
-                        //还需要判断用户是否已经登录过
 
-                        if(!that.state.user_id){
-                            //如果没登录信息，跳转贷款超市登录页面
-                            that.navToPage('AfSignIn');
-                        }else{
-                            //如果有登录信息则跳转到贷款超市主页
+                        //当app审核开关值为2时，跳转到贷超市
+                        //存储贷款超市前置后置注册参数
+
+                        //如果是后置注册，则跳转到贷款超市主页，否则跳转到注册页面
+                        if(parseInt(responseJson.reg_position_status)==2){
+                            //跳主页
                             that.navToPage('AfNav');
+                        }else{
+                            //跳注册
+                            //还需要判断用户是否已经登录过
+
+                            if(!that.state.user_id){
+                                //如果没登录信息，跳转贷款超市登录页面
+                                that.navToPage('AfSignIn');
+                            }else{
+                                //如果有登录信息则跳转到贷款超市主页
+                                that.navToPage('AfNav');
+                            }
                         }
 
 
-
                     }
-
-
                 }
 
 
@@ -180,9 +186,8 @@ export default class App extends Component<Props> {
 
     render() {
         return (
-            <Image source={checkBg} style={styles.container}  resizeMode='stretch' >
+            <Image source={utils.isIphoneX() ? checkBgX : checkBg} style={styles.container}  resizeMode='stretch' />
 
-            </Image>
         );
     }
 }

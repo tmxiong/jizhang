@@ -16,7 +16,7 @@ import { AppRegistry,
    Platform,
    AppState,
    Linking,
-    WebView
+    WebView,ImageBackground,Clipboard
   } from 'react-native';
 
 import {NavigationActions,StackActions} from 'react-navigation';
@@ -24,8 +24,11 @@ import commonFun from '../../base/commonFun/commonFun';
 var Global = require('../../WsSupport/connecting');
 import Icon from "react-native-vector-icons/Ionicons"
 import SplashScreen from 'react-native-splash-screen';
-import Navbar from '../../../../component/NavBar'
+import Navbar from '../../../../component/NavBar';
+import Notice from '../../../../component/Notice';
 import cfn from "../../../../utils/utils";
+const wechatPublicImage=require('../../Resource/images/Af/wechatPublicImage.jpg');
+const weixinNoticeImage=require('../../Resource/images/Af/weixinNoticeImage.jpg');
 
 class AppOneIndexScreen extends React.Component {
    
@@ -36,8 +39,7 @@ class AppOneIndexScreen extends React.Component {
       pageData: {
         product_list:''
       },
-      wechatPublicAccount:Global.wechatPublicAccount,
-      wechatPublicGuideImage:Global.wechatPublicGuideImage,
+      wechatPublicAccount:Global.wechat_account,
       bannerPressFunc:this.bannerPressFunc,
       showCover:0,
     };
@@ -63,12 +65,12 @@ class AppOneIndexScreen extends React.Component {
 
   componentDidMount() {
 
-    SplashScreen.hide();
+
     this.getProductIndexListNew();
 
   }
   componentWillMount(){
-
+      SplashScreen.hide();
   }
   componentDidUpdate() {
     
@@ -361,12 +363,92 @@ getProductBox(){
 
 
 }
+    cancelToWeiXin(){
+        this.setState({showCover:0});
+
+    }
+    confirmWeiXin(){
+        this.setState({showCover:0});
+
+        Linking.canOpenURL('weixin://').then((support)=>{
+            if(support){
+                Linking.openURL('weixin://');
+            }else {
+                Alert.alert('请先安装微信');
+            }
+        });
+    }
 
 
 
+    copyWechat(){
+      var that = this;
+
+      var wechatPublicAccount = that.state.wechatPublicAccount;
+      Clipboard.setString(wechatPublicAccount);
+      let  str = Clipboard.getString();
+      console.warn(str);//我是文本
+      that.setState({showCover:1});
 
 
+  }
 
+getCover(){
+    var that = this;
+    if(that.state.showCover==0){
+        return;
+    }
+
+    return(
+        <View style={styles.modeCoverOut}>
+            <View style={styles.modeCoverInner}>
+                <View style={styles.modeCover1}>
+
+                </View>
+                <View style={styles.modeCover2}>
+                    <View style={styles.wechatCoverBox}>
+                        <View style={styles.jumpToWeixinBox}>
+                            <Image  style={styles.weixinNoticeImage} source={weixinNoticeImage}   resizeMode='stretch'></Image>
+                            <View style={styles.weixinbtnBox}>
+                                <TouchableOpacity  style={styles.weixinbtnBox1} onPress={()=>that.cancelToWeiXin()}><Text style={styles.weixinbtnBox1Text}> 取消</Text></TouchableOpacity>
+                                <TouchableOpacity  style={styles.weixinbtnBox2}  onPress={()=>that.confirmWeiXin()}><Text style={styles.weixinbtnBox2Text}> 去微信</Text></TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </View>
+        </View>
+
+    );
+
+}
+
+getPhoneNum() {
+    var phoneStart = new Array("150", "131", "158", "133", "159", "137", "138", "170", "187","188", "189");
+    function getRandom(start,end){
+        return Math.floor(Math.random()*end + start);
+    }
+    function getPhoneNum() {
+        var start = phoneStart[getRandom(0,10)];
+        var end = getRandom(1000,8999);
+        return start + "****" + end;
+    }
+
+    function getMoney() {
+      return getRandom(1,20)*1000;
+    }
+
+    return `恭喜${getPhoneNum()}用户成功申请${getMoney()}元贷款！`;
+}
+
+getNotice() {
+    let a = [];
+    for(let i = 0; i < 25; i++) {
+      a.push('小技巧：申请3个以上产品，成功率高达99%哦！');
+      a.push(this.getPhoneNum())
+    }
+    return a;
+}
 
 render() {
     const { navigate } = this.props.navigation;
@@ -374,14 +456,25 @@ render() {
 
     return (
         <View style={{flex:1}}>
+            {that.getCover()}
             <Navbar
                 leftIcon={null}
                 middleText={'贷款'}
-                bgColor={'#d29034'}
+                bgColor={'#c86739'}
                 navBarHeight={cfn.picHeight(150)}
+            />
+            <Notice
+                noticeData={this.getNotice()}
             />
             <ScrollView style={styles.container}>
                 {that.getProductBox()}
+
+
+                <TouchableOpacity onPress={()=>{that.copyWechat()}} activeOpacity={0.9}>
+                    <ImageBackground style={styles.wechatBox} source={wechatPublicImage}  resizeMode='stretch'>
+                    </ImageBackground>
+                </TouchableOpacity>
+
                 <View style={{width:'100%',height:50,alignItems:'center',justifyContent:'center'}}>
                   <Text style={{color:'#999'}}>———— 更多新品 敬请期待 ————</Text>
                 </View>
@@ -649,6 +742,95 @@ const styles = StyleSheet.create({
     backgroundColor:'#f7f7f7',
     marginRight:-commonFun.deviceWidth()*0.94*0.22*0.15,
   },
+    modeCoverOut:{
+        position:'absolute',
+        width:commonFun.deviceWidth(),
+        height:commonFun.deviceHeight(),
+        zIndex:100,
 
+    },
+    modeCoverInner:{
+        position:'relative',
+        width:commonFun.deviceWidth(),
+        height:commonFun.deviceHeight(),
+
+    },
+    modeCover1:{
+        position:'absolute',
+        width:commonFun.deviceWidth(),
+        height:commonFun.deviceHeight(),
+        zIndex:101,
+        backgroundColor:"#000000",
+        opacity:0.7,
+    },
+    modeCover2:{
+        position:'absolute',
+        width:commonFun.deviceWidth(),
+        height:commonFun.deviceHeight(),
+        zIndex:102,
+    },
+    wechatBox:{
+        width:commonFun.deviceWidth(),
+        height:commonFun.deviceWidth()*0.23,
+
+    },
+    wechatCoverBox:{
+        width:commonFun.deviceWidth(),
+        height:commonFun.deviceWidth(),
+        marginTop:commonFun.deviceWidth()*0.4,
+
+    },
+    jumpToWeixinBox:{
+        width:commonFun.deviceWidth()*0.8,
+        height:commonFun.deviceWidth()*1,
+        marginLeft:commonFun.deviceWidth()*0.1,
+
+    },
+    weixinNoticeImage:{
+        width:commonFun.deviceWidth()*0.8,
+        height:commonFun.deviceWidth()*0.8,
+        borderRadius:10,
+    },
+
+    weixinbtnBox:{
+        width:commonFun.deviceWidth()*0.8,
+        height:commonFun.deviceWidth()*0.1,
+
+        marginTop:10,
+        display:'flex',
+        flexDirection:'row',
+    },
+    weixinbtnBox1:{
+        width:commonFun.deviceWidth()*0.3,
+        height:commonFun.deviceWidth()*0.1,
+        borderRadius:10,
+        display:'flex',
+        flexDirection:'row',
+        textAlign:'center',
+        justifyContent: 'center',
+        alignItems:'center',
+        backgroundColor:'#e2e2e2',
+    },
+    weixinbtnBox1Text:{
+        fontSize:18,
+        color:'#000000'
+    },
+    weixinbtnBox2:{
+        width:commonFun.deviceWidth()*0.3,
+        height:commonFun.deviceWidth()*0.1,
+        marginLeft:commonFun.deviceWidth()*0.2,
+        display:'flex',
+        flexDirection:'row',
+        textAlign:'center',
+        justifyContent: 'center',
+        alignItems:'center',
+        backgroundColor:'green',
+        borderRadius:10,
+    },
+    weixinbtnBox2Text:{
+        fontSize:18,
+        color:'#ffffff'
+
+    },
 
 });

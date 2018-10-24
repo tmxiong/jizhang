@@ -62,12 +62,12 @@ export default class App extends Component<Props> {
             this.setState({date:date});
             this._setData(date);
         });
-        SplashScreen.hide();
+
         console.log(Global);
     }
 
-    componentWillUnmount() {
-        this.ls.remove();
+    componentWillMount() {
+        SplashScreen.hide();
     }
 
     componentWillUnmount() {

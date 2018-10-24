@@ -71,7 +71,7 @@ class AfSignInScreen extends React.Component {
 
 
   componentDidMount() {
-      SplashScreen.hide();
+
 
       var _that = this;
 
@@ -82,7 +82,7 @@ class AfSignInScreen extends React.Component {
 
   }
   componentWillMount(){
-
+      SplashScreen.hide();
   }
   componentDidUpdate() {
     
