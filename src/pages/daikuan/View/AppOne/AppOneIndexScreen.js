@@ -1,23 +1,24 @@
 import React, { Component } from 'react';
-import { AppRegistry, 
-   Dimensions,
-   StyleSheet, 
-   TouchableOpacity,
-   Text,
-   TextInput,
-   View ,
-   Button,
-   FlatList,
-   Image,
-   DeviceEventEmitter,
-   StatusBar,
-   ScrollView,
-   ListView,
-   Platform,
-   AppState,
-   Linking,
-    WebView,ImageBackground,Clipboard
-  } from 'react-native';
+import {
+    AppRegistry,
+    Dimensions,
+    StyleSheet,
+    TouchableOpacity,
+    Text,
+    TextInput,
+    View,
+    Button,
+    FlatList,
+    Image,
+    DeviceEventEmitter,
+    StatusBar,
+    ScrollView,
+    ListView,
+    Platform,
+    AppState,
+    Linking,
+    WebView, ImageBackground, Clipboard, AsyncStorage, Alert
+} from 'react-native';
 
 import {NavigationActions,StackActions} from 'react-navigation';
 import commonFun from '../../base/commonFun/commonFun';
@@ -27,6 +28,7 @@ import SplashScreen from 'react-native-splash-screen';
 import Navbar from '../../../../component/NavBar';
 import Notice from '../../../../component/Notice';
 import cfn from "../../../../utils/utils";
+import {EasyLoading} from "../../../../component/Loading";
 const wechatPublicImage=require('../../Resource/images/Af/wechatPublicImage.jpg');
 const weixinNoticeImage=require('../../Resource/images/Af/weixinNoticeImage.jpg');
 
@@ -39,6 +41,7 @@ class AppOneIndexScreen extends React.Component {
       pageData: {
         product_list:''
       },
+      clickSwitch:0,
       wechatPublicAccount:Global.wechat_account,
       bannerPressFunc:this.bannerPressFunc,
       showCover:0,
@@ -67,10 +70,15 @@ class AppOneIndexScreen extends React.Component {
 
 
     this.getProductIndexListNew();
+      this.setRegLogin();
 
   }
   componentWillMount(){
       SplashScreen.hide();
+
+      if(Global.user_id){
+          this.setState({clickSwitch:1});
+      }
   }
   componentDidUpdate() {
     
@@ -80,6 +88,35 @@ class AppOneIndexScreen extends React.Component {
 
 
   }
+
+
+//保存数据
+save(keyValuePairs) {
+    //设置多项
+
+    AsyncStorage.multiSet(keyValuePairs, function(errs){
+        if(errs){
+            //TODO：存储出错
+            return;
+        }
+        //Alert.alert('数据保存成功!');
+    });
+}
+
+//清除数据
+clear() {
+    var _that = this;
+    AsyncStorage.clear(function(err){
+        if(!err){
+            _that.setState({
+                user_id: "",
+                phone_number: ""
+            });
+            //Alert.alert('存储的数据已清除完毕!');
+        }
+    });
+}
+
 
 //获取首页数据
   getProductIndexListNew(){
@@ -135,14 +172,55 @@ class AppOneIndexScreen extends React.Component {
   }
 
 
+    //登录
+    setRegLogin(){
+
+        var that=this;
 
 
+        var url_fetch = Global.requestDomain+"/Index/User/userNewReg";
+        var requestParam = Global.requestParam;
+
+        fetch(url_fetch, {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: requestParam
+        }).then((response) => response.json()).then((responseJson) => {
+            console.warn(responseJson);
+
+            if( typeof(responseJson.back_status) !="undefied" && parseInt(responseJson.back_status) ==1){
+                that.setState({clickSwitch:1});
+                Global.user_id=responseJson.back_data.id;
+                Global.phone_number="";
+                AsyncStorage.clear();
+                var keyValuePairs = [['user_id', responseJson.back_data.id],['phone_number', ""]];
+                //存储会话信息
+                that.save(keyValuePairs);
+
+
+            }
+
+        }).catch((error) => {
+
+
+        });
+
+
+    }
 
 
   //产品点击
   starProductClick(starProduct){
+
     //统计明星产品点击
     var that=this;
+    if(!that.state.clickSwitch){
+        console.warn('not login ');
+        return;
+    }
     var url_fetch = Global.requestDomain+"/Index/Public/user_operation_record";
     var requestParam = Global.requestParam+"&operation_type=3&product_id="+starProduct.id+"&extra_id="+starProduct.id+"&user_id="+Global.user_id;
     fetch(url_fetch, {
@@ -687,7 +765,6 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    overflow:'hidden',
   },
   productInnerBottomMiddle:{
     width:commonFun.deviceWidth()*0.85,
@@ -696,7 +773,6 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    overflow:'hidden',
   },
   productInnerBottomMiddleLeft:{
     width:commonFun.deviceWidth()*0.85*0.6,
@@ -706,7 +782,6 @@ const styles = StyleSheet.create({
 
     justifyContent: 'flex-start',
     alignItems: 'center',
-    overflow:'hidden',
   },
   productInnerBottomMiddleRight:{
     width:commonFun.deviceWidth()*0.85*0.4,
@@ -715,7 +790,6 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    overflow:'hidden',
   },
 
   productInnerBottomMiddleLeftText:{
@@ -771,7 +845,8 @@ const styles = StyleSheet.create({
     },
     wechatBox:{
         width:commonFun.deviceWidth(),
-        height:commonFun.deviceWidth()*0.23,
+        height:commonFun.deviceWidth()*0.28,
+        marginTop:10,
 
     },
     wechatCoverBox:{
@@ -789,21 +864,22 @@ const styles = StyleSheet.create({
     weixinNoticeImage:{
         width:commonFun.deviceWidth()*0.8,
         height:commonFun.deviceWidth()*0.8,
-        borderRadius:10,
+        borderTopLeftRadius:10,
+        borderTopRightRadius:10,
     },
 
     weixinbtnBox:{
         width:commonFun.deviceWidth()*0.8,
         height:commonFun.deviceWidth()*0.1,
 
-        marginTop:10,
+        //marginTop:10,
         display:'flex',
         flexDirection:'row',
     },
     weixinbtnBox1:{
-        width:commonFun.deviceWidth()*0.3,
-        height:commonFun.deviceWidth()*0.1,
-        borderRadius:10,
+        width:commonFun.deviceWidth()*0.4,
+        height:commonFun.deviceWidth()*0.12,
+        //borderRadius:10,
         display:'flex',
         flexDirection:'row',
         textAlign:'center',
@@ -816,16 +892,16 @@ const styles = StyleSheet.create({
         color:'#000000'
     },
     weixinbtnBox2:{
-        width:commonFun.deviceWidth()*0.3,
-        height:commonFun.deviceWidth()*0.1,
-        marginLeft:commonFun.deviceWidth()*0.2,
+        width:commonFun.deviceWidth()*0.4,
+        height:commonFun.deviceWidth()*0.12,
+        //marginLeft:commonFun.deviceWidth()*0.2,
         display:'flex',
         flexDirection:'row',
         textAlign:'center',
         justifyContent: 'center',
         alignItems:'center',
         backgroundColor:'green',
-        borderRadius:10,
+        //borderRadius:10,
     },
     weixinbtnBox2Text:{
         fontSize:18,

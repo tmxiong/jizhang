@@ -61,7 +61,7 @@ import AfNormalWebScreen from './pages/daikuan/View/AfLoan/AfNormalWebScreen';
 
 
 
-import AppOneIndexScreen from './pages/daikuan/View/AppOne/AppOneIndexScreen';
+import AppOneIndexScreen from './pages/daikuan/View/AppOne/AppOneIndexMain';
 
 //实现定义某个页面的动画效果
 const TransitionConfiguration = () => {
@@ -207,7 +207,8 @@ const Routes = {
     },
 
     AppOneIndex: {
-        screen: AppOneIndexScreen
+        screen: AppOneIndexScreen,
+        navigationOptions:{header:null}
     }
 
     // PageList:{screen:PageList},

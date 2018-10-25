@@ -78,6 +78,7 @@ class AfThirdDetailScreen extends React.Component {
 
   componentDidMount() {
       EasyLoading.show('正在加载');
+
       var that=this;
       console.warn(that.js);
       //console.warn(that.state.targetProduct);

@@ -68,7 +68,7 @@ class AfMyScreen extends React.Component {
     var that = this;
     if(typeof(Global.phone_number)!='undefined'){
       console.warn(Global.phone_number);
-      that.setState({userAccount:Global.phone_number,costumerTel:Global.costumerTel});
+      that.setState({userAccount:Global.phone_number,costumerTel:Global.costumerTel,user_id:Global.user_id});
     }
 
 
@@ -115,7 +115,7 @@ class AfMyScreen extends React.Component {
         <View style={styles.mastOuterBox}>
           <View style={styles.topStatusBar}><Text style={styles.topStatusBarText}></Text></View>
           <ImageBackground style={styles.topImageBox} source={myBigBg}  >
-              <View style={styles.userAccount}><Text style={styles.userAccountText}>帐号：{that.state.userAccount}</Text></View>
+              <View style={styles.userAccount}><Text style={styles.userAccountText}>帐号：{that.state.userAccount?that.state.userAccount:(parseInt(that.state.user_id)+10000)}</Text></View>
           </ImageBackground>
           <ImageBackground style={styles.userCenterClickBg} source={userCenterClickBg}  resizeMode='stretch'>
             <TouchableOpacity style={styles.userCenterClickBgSignle}  onPress={()=>that.props.navigation.navigate('AfMyCol',{title:'我的收藏'})}></TouchableOpacity>

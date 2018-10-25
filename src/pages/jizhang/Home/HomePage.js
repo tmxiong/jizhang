@@ -334,7 +334,7 @@ export default class App extends Component<Props> {
                     </View>
                 </View>
                 <FlatList
-                    style={{width:'100%',marginBottom:utils.picWidth(100),flex:1}}
+                    style={{width:'100%',flex:1}}
                     keyExtractor={(item,index)=>index.toString()}
                     data={this.state.data}
                     renderItem={this._renderItem.bind(this)}

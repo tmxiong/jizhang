@@ -272,7 +272,7 @@ export default class App extends Component<Props> {
               />
           </View>
 
-          <View style={{marginTop:20,width:'100%',height:'100%'}}>
+          <View style={{paddingTop:20,width:'100%',height:'100%',backgroundColor:'rgba(255,255,255,0.5)'}}>
               {this.state.data.length === 0 ?
                   <TouchableOpacity
                       activeOpacity={0.8}
