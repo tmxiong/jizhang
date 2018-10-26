@@ -12,7 +12,8 @@ import {
 // import NetInfo from './utils/NetInfo';
 // NetInfo.registNetworkStateListener((netState)=>{console.log('netState',netState)},(netChange)=>{console.log('netChange',netChange)})
 import { createStackNavigator,createBottomTabNavigator,NavigationActions } from 'react-navigation';
-// import CardStackStyleInterpolator from 'react-navigation/src/views/StackView/StackViewStyleInterpolator';
+import handleError from './pages/daikuan/base/tools/handleError'
+handleError();
 import {Loading,EasyLoading} from './component/Loading'
 import {tabIcon} from './imgs/imgs'
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -34,9 +35,6 @@ import AddLcPage from './pages/jizhang/Tixing/AddLcPage'
 import DetailPage from './pages/jizhang/Home/DetailPage'
 
 import WebView from './pages/jizhang/DK/WebView';
-
-
-
 
 
 

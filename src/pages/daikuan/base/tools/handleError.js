@@ -8,10 +8,9 @@ import {
     Alert,
     DeviceEventEmitter
 } from 'react-native';
-var sendParams = require('../../WsSupport/sendParams');
 import {setJSExceptionHandler, getJSExceptionHandler} from 'react-native-exception-handler';
 var DeviceInfo = require('react-native-device-info');
-import Global from '../../WsSupport/connecting'
+import{EasyLoading} from '../../../../component/Loading'
 module.exports = function () {
     setJSExceptionHandler((e, isFatal)=>{
         if(isFatal) {
@@ -27,24 +26,11 @@ module.exports = function () {
             // deviceInfo += '系统版本：' + DeviceInfo.getSystemVersion() + '\n';
             // // app版本 e.g. "1.1.0.89"
             // deviceInfo += 'app版本：' + DeviceInfo.getVersion() + '\n';
+            EasyLoading.show('请稍候');
+            setTimeout(()=>{
+              EasyLoading.dismis()
+            },1000)
 
-            let methodName = 'AddPhoneErrorLog';
-            let listener = DeviceEventEmitter.addListener(methodName,(data,err)=>{
-                listener.remove();
-                // alert('发送成功'+data);
-            });
-            let params=[];
-            params[0] = Global.Owner;
-            params[1] = new Date().format('yyyy-MM-dd hh:mm:ss');
-            params[2] = DeviceInfo.getBrand();
-            params[3] = DeviceInfo.getModel();
-            params[4] = DeviceInfo.getSystemName();
-            params[5] = DeviceInfo.getSystemVersion();
-            params[6] = DeviceInfo.getVersion();
-            params[7] = e.stack.toString();
-            sendParams.sendTo(methodName, params);
-
-            Alert.alert('错误：', 'APP错误，已发送给管理员！');
         }
 
     },true);

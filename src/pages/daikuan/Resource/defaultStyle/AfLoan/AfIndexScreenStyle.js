@@ -463,4 +463,11 @@ module.exports = StyleSheet.create({
         color:'gray'
     },
 
+    wechatBox: {
+        width: commonFun.deviceWidth(),
+        height: commonFun.deviceWidth() * 0.33,
+        marginTop: 10,
+
+    },
+
 });

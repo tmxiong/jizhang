@@ -1,24 +1,25 @@
 import React, { Component } from 'react';
-import { AppRegistry, 
-   Dimensions,
-   StyleSheet, 
-   TouchableOpacity,
-   Text,
-   TextInput,
-   View ,
-   Button,
-   FlatList,
-   Image,
-   DeviceEventEmitter,
-   StatusBar,
-   ScrollView,
-   ListView,
-   Platform,
-   AppState,
-   Linking,
-    StausBar,Alert
+import {
+    AppRegistry,
+    Dimensions,
+    StyleSheet,
+    TouchableOpacity,
+    Text,
+    TextInput,
+    View,
+    Button,
+    FlatList,
+    Image,
+    DeviceEventEmitter,
+    StatusBar,
+    ScrollView,
+    ListView,
+    Platform,
+    AppState,
+    Linking,
+    StausBar, Alert, Clipboard,ImageBackground
 
-  } from 'react-native';
+} from 'react-native';
 
 import {NavigationActions,StackActions} from 'react-navigation';
 const styles = require('../../Resource/defaultStyle/AfLoan/AfIndexScreenStyle');
@@ -40,7 +41,8 @@ const creditCardEmpty=require('../../Resource/images/Af/creditCardEmpty.png');
 const creditCardApply=require('../../Resource/images/Af/creditCardApply.png');
 import Icon from 'react-native-vector-icons/Ionicons';
 import SplashScreen from "react-native-splash-screen";
-
+const wechatPublicImage = require('../../Resource/images/Af/wechatPublicImage.jpg');
+const weixinNoticeImage = require('../../Resource/images/Af/weixinNoticeImage.jpg');
 
 
 class AfIndexScreen extends React.Component {
@@ -70,7 +72,9 @@ class AfIndexScreen extends React.Component {
         credit_card_list:'',
         credit_card_list_switch:0,
       },
-      bannerPressFunc:this.bannerPressFunc
+        wechatPublicAccount: Global.wechat_account,
+        text_des: Global.text_des,
+        bannerPressFunc:this.bannerPressFunc
     };
     this.getProductIndexListNew();
 
@@ -726,6 +730,12 @@ class AfIndexScreen extends React.Component {
               {that.getSignleBox(4,0)}
               {that.getCreditCard()}
 
+              <TouchableOpacity onPress={() => {
+                  that.copyWechat()
+              }} activeOpacity={0.9}>
+                  <ImageBackground style={styles.wechatBox} source={wechatPublicImage} resizeMode='stretch'>
+                  </ImageBackground>
+              </TouchableOpacity>
 
                 <Image style={styles.bottomNotice} source={bottomNotice}   resizeMode='stretch'/>
                 <View style={styles.bottomBlank}></View>
@@ -749,6 +759,55 @@ class AfIndexScreen extends React.Component {
 
 
   }
+
+
+
+    confirmWeiXin() {
+        this.setState({showCover: 0});
+
+        Linking.canOpenURL('weixin://').then((support) => {
+            if (support) {
+                Linking.openURL('weixin://');
+            } else {
+                Alert.alert('请先安装微信');
+            }
+        });
+    }
+
+
+    copyWechat() {
+        var that = this;
+
+        var wechatPublicAccount = that.state.wechatPublicAccount;
+        Clipboard.setString(wechatPublicAccount);
+        let str = Clipboard.getString();
+        console.warn(str);//我是文本
+        // that.setState({showCover: 1});
+
+        Alert.alert('复制成功',
+            that.state.text_des?that.state.text_des:'微信号（公众号）"'+wechatPublicAccount+'"已经复制，请前往微信粘贴搜索加贷款资源群',
+            [
+
+                {
+                    text: '取消',
+                    onPress: () => {},
+                    style: 'cancel'
+                },
+                {
+                    text: '去微信粘贴',
+                    onPress: () =>{that.confirmWeiXin()}
+                },
+            ],
+            {
+                cancelable: true,
+                onDismiss: () => {}
+            });
+    }
+
+
+
+
+
 
 render() {
     const { navigate } = this.props.navigation;

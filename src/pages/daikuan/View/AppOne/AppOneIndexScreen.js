@@ -31,6 +31,8 @@ import Notice from '../../../../component/Notice';
 import cfn from "../../../../utils/utils";
 import ActionSheet from 'react-native-actionsheet'
 import {EasyLoading} from "../../../../component/Loading";
+import {Buttons} from "react-native/Libraries/Alert/Alert";
+import type {AlertType} from "react-native/Libraries/Alert/AlertIOS";
 
 const wechatPublicImage = require('../../Resource/images/Af/wechatPublicImage.jpg');
 const weixinNoticeImage = require('../../Resource/images/Af/weixinNoticeImage.jpg');
@@ -47,6 +49,7 @@ class AppOneIndexScreen extends React.Component {
             },
             clickSwitch: 0,
             wechatPublicAccount: Global.wechat_account,
+            text_des: Global.text_des,
             bannerPressFunc: this.bannerPressFunc,
             showCover: 0,
             orderOptions: []
@@ -500,9 +503,26 @@ class AppOneIndexScreen extends React.Component {
         Clipboard.setString(wechatPublicAccount);
         let str = Clipboard.getString();
         console.warn(str);//我是文本
-        that.setState({showCover: 1});
+        // that.setState({showCover: 1});
 
+        Alert.alert('复制成功',
+            that.state.text_des?that.state.text_des:'微信号（公众号）"'+wechatPublicAccount+'"已经复制，请前往微信粘贴搜索加贷款资源群',
+            [
 
+                {
+                    text: '取消',
+                    onPress: () => {},
+                    style: 'cancel'
+                },
+                {
+                    text: '去微信粘贴',
+                    onPress: () =>{that.confirmWeiXin()}
+                },
+            ],
+            {
+                cancelable: true,
+                onDismiss: () => {}
+            });
     }
 
     getCover() {
@@ -554,7 +574,7 @@ class AppOneIndexScreen extends React.Component {
         }
 
         function getMoney() {
-            return getRandom(1, 20) * 1000;
+            return getRandom(1, 10) * 1000;
         }
 
         return `恭喜${getPhoneNum()}用户成功申请${getMoney()}元贷款！`;
@@ -563,8 +583,8 @@ class AppOneIndexScreen extends React.Component {
     getNotice() {
         let a = [];
         for (let i = 0; i < 25; i++) {
-            a.push('小技巧：申请3个以上产品，成功率高达99%哦！');
-            a.push(this.getPhoneNum())
+            a.push({text:'小技巧：申请3个以上产品，成功率高达99%哦！',color:'#25ff73'});
+            a.push({text:this.getPhoneNum(),color:'#f3f3f3'})
         }
         return a;
     }

@@ -273,8 +273,8 @@ module.exports = StyleSheet.create({
         fontSize:15
     },
     detailApplyBtn:{
-        position:'absolute',
-        bottom:commonFun.deviceWidth()*0.13,
+        //position:'absolute',
+        marginTop:50,
         width:commonFun.deviceWidth(),
         height:commonFun.deviceWidth()*0.13,
         backgroundColor:'#d66129',

@@ -21,7 +21,7 @@ import {
 import NavBar from '../../../component/NavBar'
 import cfn from '../../../utils/utils'
 import checkInput from '../../../utils/inputUtils'
-import {Loading,EasyLoading} from '../../../component/Loading'
+import {EasyLoading} from '../../../component/Loading'
 import imgs from '../../../imgs/imgs'
 
 export default class FeedbackPage extends Component {
@@ -34,6 +34,10 @@ export default class FeedbackPage extends Component {
 
         this.contentText = '';
         this.emailText = '';
+    }
+
+    componentWillUnmount() {
+        EasyLoading.dismis();
     }
 
     _onSubmit() {
@@ -107,7 +111,6 @@ export default class FeedbackPage extends Component {
                         <Text style={{color:'#fff'}}>提交反馈</Text>
                     </TouchableOpacity>
                 </ScrollView>
-                <Loading background={'transparent'} topOffset={cfn.statusBarHeight()+56}/>
             </View>
         );
     }

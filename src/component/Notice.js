@@ -27,7 +27,7 @@ export default class Notice extends PureComponent {
 
     static defaultProps = {
         noticeData: [
-            '1111111111111111',
+            {text:'1111111111111111',color:'#f90'},
         ],
         toToPage : ()=>{}
     };
@@ -91,8 +91,8 @@ export default class Notice extends PureComponent {
         for (let i = 0; i < noticeData.length; i++) {
             arr.push(
                 <View key={i} style={styles.noticeTextContainer} >
-                    <Text allowFontScaling={false} style={styles.noticeText} numberOfLines={1}>
-                        {noticeData[i]}
+                    <Text allowFontScaling={false} style={[styles.noticeText,{color:noticeData[i].color}]} numberOfLines={1}>
+                        {noticeData[i].text}
                     </Text>
                 </View>
             )

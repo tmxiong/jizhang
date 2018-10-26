@@ -261,7 +261,7 @@ class AfProductDetailScreen extends React.Component {
     }
 
     return (
-        <View style={styles.mastOuterBox}>
+        <ScrollView bounces={false} style={styles.mastOuterBox}>
 
           <View style={styles.detailTopBox}>
             <View style={styles.detailTopImageBox}>
@@ -300,7 +300,7 @@ class AfProductDetailScreen extends React.Component {
                   <View style={styles.detailMiddleBoxTop}><Text  style={{color:'#000000',fontSize:16}}>贷款金额(元)</Text></View>
                   <View style={styles.detailMiddleBoxBottom}>
                     <TextInput
-
+                        keyboardType="numeric"
                         onFocus={()=>that.setState({loanAmount:0})}
                         onChangeText ={(thisValue) => that.changeTargetLoan(thisValue)}
                         value={that.state.loanAmount}
@@ -359,7 +359,7 @@ class AfProductDetailScreen extends React.Component {
 
          <TouchableOpacity  onPress={()=>that.starProductClick(that.state.targetProduct)} style={styles.detailApplyBtn}><Text style={styles.detailApplyBtnText}>立 即 申 请</Text></TouchableOpacity>
 
-        </View>
+        </ScrollView>
 
   );
   }

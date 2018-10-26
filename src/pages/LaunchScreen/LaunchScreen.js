@@ -102,6 +102,7 @@ export default class App extends Component<Props> {
                 Global.app_route_index = responseJson.app_route_index;  //daichao板式 索引 1 默认 2 简化
                 Global.costumerTel = responseJson.customer_tel;  //客服电话
                 Global.wechat_account = responseJson.wechat_account;  //微信
+                Global.text_des = responseJson.text_des;  //微信引导语
 
 
                 //当该版本app有H5站点时，跳转到H5站点
