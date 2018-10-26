@@ -11,6 +11,7 @@
     "native-echarts": "^0.4.0",
     "react": "16.5.0",
     "react-native": "0.57.1",
+    "react-native-actionsheet": "^2.4.2",
     "react-native-datepicker": "^1.7.2",
     "react-native-device-info": "^0.24.0",
     "react-native-exception-handler": "^2.10.0",
