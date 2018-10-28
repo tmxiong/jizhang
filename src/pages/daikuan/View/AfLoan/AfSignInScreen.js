@@ -250,7 +250,6 @@ class AfSignInScreen extends React.Component {
 
     //登录
     setLogin(){
-        EasyLoading.show('正在登录');
         console.warn(this.state.loginPhoneNumber);
         var that=this;
         if(that.state.is_agree==0){
@@ -265,7 +264,7 @@ class AfSignInScreen extends React.Component {
             Alert.alert('请输入验证码');
             return;
         }
-
+        EasyLoading.show('正在登录');
         var url_fetch = Global.requestDomain+"/Index/User/userReg";
         var requestParam = Global.requestParam;
         requestParam += "&phone_number="+that.state.loginPhoneNumber+"&verify_code="+that.state.verifyCode;
@@ -326,7 +325,12 @@ class AfSignInScreen extends React.Component {
         });
         dispatch(resetAction);
     }
+    gotoAgreement(){
 
+      this.props.navigation.navigate('agreement');
+
+
+    }
 
 
 render() {
@@ -375,8 +379,8 @@ render() {
                             </View>
                             <TouchableOpacity style={styles.signBoxInnerInputBox3} onPress={()=>that.setLogin()}></TouchableOpacity>
                             <View style={styles.signBoxInnerInputBox4}>
-                                {Global.app_version_status == 2?<TouchableOpacity style={styles.loginAgree} onPress={()=>that.setAgree()}><Image source={that.state.AgreeImage} style={styles.loginAgree} resizeMode='stretch'></Image></TouchableOpacity>:null}
-                                {Global.app_version_status == 2?<View style={styles.agreeTextBox}><Text style={styles.agreeText}>我已经阅读并同意《用户服务协议》</Text></View>:null}
+                                <TouchableOpacity style={styles.loginAgree} onPress={()=>that.setAgree()}><Image source={that.state.AgreeImage} style={styles.loginAgree} resizeMode='stretch'></Image></TouchableOpacity>
+                                <View style={styles.agreeTextBox}><Text style={styles.agreeText}>我已经阅读并同意</Text><TouchableOpacity onPress={()=>that.gotoAgreement()}><Text style={[styles.agreeText,{color:"blue",marginLeft:0}]}>《用户服务协议》</Text></TouchableOpacity></View>
 
                             </View>
 

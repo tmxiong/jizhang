@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     itemContainer: {
         width: '100%',
         height: utils.picHeight(120),
-        backgroundColor: '#fff',
+        backgroundColor: 'rgba(255,255,255,0.7)',
         borderBottomWidth: 1,
         borderBottomColor: '#e9e9e9',
         flexDirection: 'row',

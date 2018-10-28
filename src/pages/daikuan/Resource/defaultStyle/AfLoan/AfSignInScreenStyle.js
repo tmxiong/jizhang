@@ -134,7 +134,10 @@ module.exports = StyleSheet.create({
         marginTop:3
     },
     agreeTextBox:{
+        width: "100%",
         height: 25,
+        display:'flex',
+        flexDirection:'row',
     },
     agreeText:{
         height: 25,

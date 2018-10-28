@@ -409,7 +409,7 @@ class AppOneIndexScreen extends React.Component {
                                     <View style={styles.productInnerTopInnerRight}>
                                         <View style={styles.productInnerTopInnerRightA}>
                                             <View style={styles.productInnerTopInnerRightA1}><Text
-                                                style={styles.A1Text}>{thisProduct.product_name}</Text></View>
+                                                style={styles.A1Text}>{thisProduct.product_name}<Text style={{fontSize:14,color:"red"}}> {thisProduct.amount_low}~{thisProduct.amount_high}元</Text></Text></View>
                                             <View style={styles.productInnerTopInnerRightA2}>
                                                 <Icon name="md-heart" style={styles.iconStyle} size={12}
                                                       color="#fec844"/>
@@ -421,6 +421,7 @@ class AppOneIndexScreen extends React.Component {
                                                       color="#fec844"/>
                                                 <Icon name="md-heart" style={styles.iconStyle} size={12}
                                                       color="#fec844"/>
+                                                <Text style={{fontSize:10,color:'gray'}}>还款期限:{thisProduct.divide_period_min}~{thisProduct.divide_period_max}天</Text>
                                             </View>
                                             <View style={styles.productInnerTopInnerRightA3}>
                                                 {tagView}

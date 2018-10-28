@@ -56,6 +56,7 @@ import AfCreditThirdDetailScreen from './pages/daikuan/View/AfLoan/AfCreditThird
 import AfThirdDetailScreen from './pages/daikuan/View/AfLoan/AfThirdDetailScreen';
 import AfWebScreen from './pages/daikuan/View/AfLoan/AfWebScreen';
 import AfNormalWebScreen from './pages/daikuan/View/AfLoan/AfNormalWebScreen';
+import AfAgreement from './pages/daikuan/View/AfLoan/AfAgreement';
 
 
 
@@ -202,6 +203,9 @@ const Routes = {
     },
     AfNorWeb:{
         screen: AfNormalWebScreen
+    },
+    agreement:{
+        screen: AfAgreement
     },
 
     AppOneIndex: {

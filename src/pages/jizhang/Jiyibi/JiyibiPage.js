@@ -54,7 +54,7 @@ export default class App extends Component<Props> {
       this.renderItems(outlayItemsConfig);
     this.ls = DeviceEventEmitter.addListener('showJiyibi',(isShow)=>{
       this.setState({
-          modalVisible: isShow
+          modalVisible: isShow,
       });
       if(!isShow) {
           this.startInputAnim(0);
@@ -64,6 +64,7 @@ export default class App extends Component<Props> {
           this.renderItems(outlayItemsConfig);
           this.jizhangType = 'outlay'
       }
+      this.onMiddleItemPress('l');
     });
       this.ls1 = DeviceEventEmitter.addListener('setItem',(data)=>{
           this.itemData = data;
