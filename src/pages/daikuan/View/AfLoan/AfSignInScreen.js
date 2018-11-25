@@ -1,21 +1,12 @@
 import React, { Component } from 'react';
-import { AppRegistry, 
-   Dimensions,
-   StyleSheet, 
+import {
    TouchableOpacity,
    Text,
    TextInput,
    View ,
-   Button,
-   FlatList,
    Image,
-   DeviceEventEmitter,
    StatusBar,
    ScrollView,
-   ListView,
-   Platform,
-   AppState,
-   Linking,
     ImageBackground,
    AsyncStorage,Alert
   } from 'react-native';
@@ -341,9 +332,7 @@ render() {
     return (
         <ScrollView bounces={false}>
             <View style={styles.container}>
-                <Image source={signBg} style={styles.bgImage} resizeMode='stretch'>
-
-                </Image>
+                <Image source={signBg} style={styles.bgImage} resizeMode='stretch'/>
                 <View style={styles.signBox}>
                     <ImageBackground style={styles.signBoxInner} source={signInnerBg} resizeMode='stretch'>
                         <View style={styles.signBoxInnerText}>
@@ -388,6 +377,7 @@ render() {
                     </ImageBackground>
                 </View>
             </View>
+            <StatusBar hidden={false}  translucent= {true} backgroundColor={'transparent'} barStyle={'light-content'}/>
         </ScrollView>
 
 

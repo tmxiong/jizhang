@@ -186,8 +186,14 @@ export default class App extends Component<Props> {
     }
 
     render() {
+        let bg;
+        if(Platform.OS === 'ios') {
+            bg = utils.isIphoneX() ? checkBgX : checkBg;
+        }else {
+            bg = {uri:"launch_screen"};
+        }
         return (
-            <Image source={utils.isIphoneX() ? checkBgX : checkBg} style={styles.container}  resizeMode='stretch' />
+            <Image source={bg} style={styles.container}  resizeMode='stretch' />
 
         );
     }

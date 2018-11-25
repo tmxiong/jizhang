@@ -42,7 +42,6 @@ const creditCardApply=require('../../Resource/images/Af/creditCardApply.png');
 import Icon from 'react-native-vector-icons/Ionicons';
 import SplashScreen from "react-native-splash-screen";
 const wechatPublicImage = require('../../Resource/images/Af/wechatPublicImage.jpg');
-const weixinNoticeImage = require('../../Resource/images/Af/weixinNoticeImage.jpg');
 
 
 class AfIndexScreen extends React.Component {

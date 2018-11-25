@@ -66,7 +66,7 @@ export default class App extends Component<Props> {
 
                 <FlatList
                     style={{width:'100%',flex:1}}
-                    keyExtractor={(item,index)=>index.toString()}
+                    keyExtractor={(item,index)=>item}
                     data={this.state.data}
                     renderItem={this._renderItem.bind(this)}
                     ListEmptyComponent={()=><Text style={{color:'#aaa',alignSelf:'center',marginTop:200}}>暂无添加记录</Text>}
@@ -117,24 +117,24 @@ const styles = StyleSheet.create({
 });
 
 const dkConfig = [
-    {name: '融360', icon:dkIcon.融360},
-    {name: '平安好贷', icon: dkIcon.平安好贷},
-    {name: '新浪有借', icon:dkIcon.新浪有借},
-    {name: '小赢卡贷', icon:dkIcon.小赢卡贷},
-    {name: '宜人贷', icon:dkIcon.宜人贷},
-    {name: '小鲨易贷', icon:dkIcon.小鲨易贷},
-    {name: '万达惠普', icon:dkIcon.万达惠普},
-    {name: '拍拍贷', icon:dkIcon.拍拍贷},
-    {name: '你我贷', icon:dkIcon.你我贷},
-    {name: '马上贷', icon:dkIcon.马上贷},
-    {name: '立即贷', icon:dkIcon.立即贷},
-    {name: '捷信金融', icon:dkIcon.捷信金融},
-    {name: '嗨付-海尔金融', icon:dkIcon['嗨付-海尔金融']},
-    {name: '包银消费金融', icon:dkIcon.包银消费金融},
-    {name: '百度有钱花', icon:dkIcon.百度有钱花},
-    {name: '安逸花', icon:dkIcon.安逸花},
-    {name: '51人品贷', icon:dkIcon['51人品贷']},
-    {name: '其它平台', icon:dkIcon['其它平台']},
+    {name: '融360', icon:dkIcon.rong360},
+    {name: '平安好贷', icon: dkIcon.pinganhaodai},
+    {name: '新浪有借', icon:dkIcon.xinlangyoujie},
+    {name: '小赢卡贷', icon:dkIcon.xiaoyinkadai},
+    {name: '宜人贷', icon:dkIcon.yirendai},
+    {name: '小鲨易贷', icon:dkIcon.xiaoshayidai},
+    {name: '万达惠普', icon:dkIcon.wandahuipu},
+    {name: '拍拍贷', icon:dkIcon.paipaidai},
+    {name: '你我贷', icon:dkIcon.niwodai},
+    {name: '马上贷', icon:dkIcon.mashangdai},
+    {name: '立即贷', icon:dkIcon.lijidai},
+    {name: '捷信金融', icon:dkIcon.jiexinjinrong},
+    {name: '嗨付-海尔金融', icon:dkIcon.haifu_haierjinrong},
+    {name: '包银消费金融', icon:dkIcon.baoyinxiaofeijinrong},
+    {name: '百度有钱花', icon:dkIcon.baiduyouqianhua},
+    {name: '安逸花', icon:dkIcon.anyihua},
+    {name: '51人品贷', icon:dkIcon.renpingdai},
+    {name: '其它平台', icon:dkIcon.other},
     // {name: '中国工商银行', icon:dkIcon.中国工商银行},
     // {name: '中国银行', icon:dkIcon.},
     // {name: '中国邮政储蓄银行', icon:dkIcon.},

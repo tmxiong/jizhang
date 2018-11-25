@@ -3,7 +3,6 @@ import commonFun from '../../../base/commonFun/commonFun'
 
 module.exports = StyleSheet.create({
     container: {
-        flex:1,
         alignItems:'center',
         width: commonFun.deviceWidth(),
         height: commonFun.deviceHeight(),
@@ -57,6 +56,7 @@ module.exports = StyleSheet.create({
         width:"100%",
         height:"100%",
         fontSize:15,
+        padding:0,
 
     },
     clearPhoneInput:{
@@ -87,6 +87,7 @@ module.exports = StyleSheet.create({
         width:"100%",
         height:"100%",
         fontSize:15,
+        padding:0
 
     },
     getVerifyCodeBtn:{

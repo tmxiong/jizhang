@@ -11,7 +11,8 @@ import {Platform, StyleSheet, Text, View, Image} from 'react-native';
 import cfn from "../../../utils/utils";
 import NavBar from '../../../component/NavBar'
 import DeviceInfo from 'react-native-device-info'
-import appIcon from '../../../imgs/app_icon.png'
+import appIcon_ios from '../../../imgs/app_icon_ios.png'
+import appIcon_android from '../../../imgs/app_icon_android.png'
 
 type Props = {};
 export default class App extends Component<Props> {
@@ -24,8 +25,8 @@ export default class App extends Component<Props> {
                     leftIcon={'ios-arrow-back'}
                 />
                 <View style={{width:'100%',height:'100%',alignItems:'center'}}>
-                    <Image source={appIcon} style={{width:60,height:60,borderRadius:6,marginTop:100}}/>
-                    <Text style={styles.welcome}>钱包管家</Text>
+                    <Image source={Platform.OS === 'ios' ? appIcon_ios : appIcon_ios} style={{width:60,height:60,borderRadius:6,marginTop:100}}/>
+                    <Text style={styles.welcome}>{Platform.OS === "ios" ? "钱包管家" : "花钱管家"}</Text>
                     <Text style={styles.instructions}>v {DeviceInfo.getVersion()}</Text>
                 </View>
 

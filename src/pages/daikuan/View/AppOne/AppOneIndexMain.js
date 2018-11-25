@@ -55,7 +55,7 @@ const Main = createBottomTabNavigator({
         indicatorStyle: {height: 0}, // android 中TabBar下面会显示一条线，高度设为 0 后就不显示线了， 不知道还有没有其它方法隐藏？？？
         style: {
             backgroundColor: '#f5f5f5', // TabBar 背景色
-            height:50,
+            //height:50,
             paddingTop:Platform.OS == 'ios' ? 0 : 6
         },
         labelStyle: Platform.OS == 'ios' ?
@@ -68,7 +68,7 @@ const Main = createBottomTabNavigator({
                 marginTop: 0,
             },
         tabStyle: {
-            height: 50,
+            //height: 50,
 
         },
     },

@@ -348,7 +348,7 @@ export default class App extends Component<Props> {
 
   render() {
     return (
-      <View style={styles.container}>
+
         <Modal
             animationType="slide"
             transparent={false}
@@ -360,6 +360,7 @@ export default class App extends Component<Props> {
               middleView={this.renderMiddleView()}
               rightText={'取消'}
               rightFn={()=>this.closeModal()}
+              modalState={true}
             />
             <View style={{
                 width: utils.picWidth(130),
@@ -477,7 +478,6 @@ export default class App extends Component<Props> {
 
         </Modal>
 
-      </View>
     );
   }
 }
